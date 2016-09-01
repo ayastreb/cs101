@@ -33,7 +33,9 @@ module.exports = (array = []) => {
     return {
         size,
         push,
-        pop
+        pop,
+        shift,
+        unshift
     };
 
     /**
@@ -57,7 +59,7 @@ module.exports = (array = []) => {
     }
 
     /**
-     * Push new item to the head of the list.
+     * Add new item to the beginning of the list.
      *
      * Performance: O(1)
      * @param {*} item
@@ -71,7 +73,7 @@ module.exports = (array = []) => {
     }
 
     /**
-     * Pop item from the head of the list.
+     * Remove and return item from the beginning of the list.
      *
      * Performance: O(1)
      * @returns {*}
@@ -83,5 +85,44 @@ module.exports = (array = []) => {
         length--;
 
         return item;
+    }
+
+    /**
+     * Add item to the end of the list.
+     *
+     * Performance: O(n)
+     * @param {*} item
+     */
+    function unshift(item) {
+        if (head === null) return push(item);
+        let current = head;
+
+        while (current.next !== null) current = current.next;
+        current.next = {
+            data: item,
+            next: null
+        };
+        length++;
+    }
+
+    /**
+     * Remove and return item from the end of the list.
+     *
+     * Performance: O(n)
+     * @returns {*}
+     */
+    function shift() {
+        if (head === null) throw Error("Can't shift from empty list.");
+        if (size() === 1) return pop();
+
+        let previous, current = head;
+        while (current.next !== null) {
+            previous = current;
+            current = current.next;
+        }
+        previous.next = null;
+        length--;
+
+        return current.data;
     }
 };

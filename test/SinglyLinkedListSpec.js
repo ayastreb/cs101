@@ -7,7 +7,7 @@ test('create empty list', assert => {
     assert.end();
 });
 
-test('push items to the list', assert => {
+test('push items to the beginning of the list', assert => {
     const list = SinglyLinkedList();
     list.push('foo');
     list.push('bar');
@@ -15,13 +15,33 @@ test('push items to the list', assert => {
     assert.end();
 });
 
-test('pop items from the list', assert => {
+test('pop items from the beginning of the list', assert => {
     const list = SinglyLinkedList();
     list.push('foo');
     list.push('bar');
     assert.equal(list.pop(), 'bar');
     assert.equal(list.pop(), 'foo');
     assert.equal(list.size(), 0);
+    assert.end();
+});
+
+test('unshift item to the end of the list', assert => {
+    const list = SinglyLinkedList();
+    list.unshift('baz');
+    list.unshift('bar');
+    list.unshift('foo');
+    assert.equal(list.size(), 3);
+    assert.equal(list.pop(), 'baz');
+    assert.equal(list.pop(), 'bar');
+    assert.equal(list.pop(), 'foo');
+    assert.end();
+});
+
+test('shift item from the end of the list', assert => {
+    const list = SinglyLinkedList(['foo', 'baz', 'bar']);
+    assert.equal(list.shift(), 'foo');
+    assert.equal(list.shift(), 'baz');
+    assert.equal(list.shift(), 'bar');
     assert.end();
 });
 
@@ -45,8 +65,9 @@ test('create multiple lists', assert => {
     assert.end();
 });
 
-test('throws error when empty list is popped', assert => {
+test('throws error when empty list is popped or shifted', assert => {
     const list = SinglyLinkedList();
     assert.throws(() => list.pop(), Error);
+    assert.throws(() => list.shift(), Error);
     assert.end();
 });
