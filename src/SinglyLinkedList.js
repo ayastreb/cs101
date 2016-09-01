@@ -34,7 +34,7 @@ module.exports = (array = []) => {
         size,
         push,
         pop
-    }
+    };
 
     /**
      * Push all items of given array into the list.
@@ -63,11 +63,10 @@ module.exports = (array = []) => {
      * @param {*} item
      */
     function push(item) {
-        const node = {
+        head = {
             data: item,
             next: head
-        }
-        head = node;
+        };
         length++;
     }
 
@@ -79,10 +78,10 @@ module.exports = (array = []) => {
      */
     function pop() {
         if (head === null) throw Error("Can't pop from empty list.");
-        const data = head.data;
+        const item = head.data;
         head = head.next;
         length--;
 
-        return data;
+        return item;
     }
-}
+};

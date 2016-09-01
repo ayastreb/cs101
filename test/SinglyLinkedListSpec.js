@@ -44,3 +44,9 @@ test('create multiple lists', assert => {
     assert.equal(listB.pop(), 'baz');
     assert.end();
 });
+
+test('throws error when empty list is popped', assert => {
+    const list = SinglyLinkedList();
+    assert.throws(() => list.pop(), Error);
+    assert.end();
+});
