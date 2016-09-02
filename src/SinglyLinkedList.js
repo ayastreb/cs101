@@ -1,5 +1,6 @@
 /**
  * Singly Linked List is a linear data structure with sequential access.
+ * Basic implementation without tail pointer.
  *
  * Advantages:
  * - constant time add/remove item from the beginning of the list (push/pop)
@@ -36,7 +37,7 @@ module.exports = (array = []) => {
         pop,
         shift,
         unshift,
-        get
+        find
     };
 
     /**
@@ -128,13 +129,13 @@ module.exports = (array = []) => {
     }
 
     /**
-     * Get item at given position from the beginning of the list.
+     * Find item at given position from the beginning of the list.
      *
      * Performance: O(n)
      * @param {Number} index position of queried item
      * @returns {*}
      */
-    function get(index) {
+    function find(index) {
         if (index >= size()) throw RangeError(`Index ${index} is out of range.`);
         let current = head;
         for (var i = 0; i < index; i++) {

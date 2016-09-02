@@ -72,15 +72,15 @@ test('throws error when empty list is popped or shifted', assert => {
     assert.end();
 });
 
-test('get item by index', assert => {
+test('find item by index', assert => {
     const list = SinglyLinkedList(['foo', 'bar', 'baz']);
-    assert.equal(list.get(0), 'baz');
-    assert.equal(list.get(2), 'foo');
+    assert.equal(list.find(0), 'baz');
+    assert.equal(list.find(2), 'foo');
     assert.end();
 });
 
 test('throws error when trying to get item out of range', assert => {
     const list = SinglyLinkedList(['foo']);
-    assert.throws(() => list.get(1), RangeError);
+    assert.throws(() => list.find(1), RangeError);
     assert.end();
 });
