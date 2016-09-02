@@ -35,7 +35,8 @@ module.exports = (array = []) => {
         push,
         pop,
         shift,
-        unshift
+        unshift,
+        get
     };
 
     /**
@@ -79,7 +80,7 @@ module.exports = (array = []) => {
      * @returns {*}
      */
     function pop() {
-        if (head === null) throw Error("Can't pop from empty list.");
+        if (head === null) throw RangeError("Can't pop from empty list.");
         const item = head.data;
         head = head.next;
         length--;
@@ -112,7 +113,7 @@ module.exports = (array = []) => {
      * @returns {*}
      */
     function shift() {
-        if (head === null) throw Error("Can't shift from empty list.");
+        if (head === null) throw RangeError("Can't shift from empty list.");
         if (size() === 1) return pop();
 
         let previous, current = head;
@@ -122,6 +123,23 @@ module.exports = (array = []) => {
         }
         previous.next = null;
         length--;
+
+        return current.data;
+    }
+
+    /**
+     * Get item at given position from the beginning of the list.
+     *
+     * Performance: O(n)
+     * @param {Number} index position of queried item
+     * @returns {*}
+     */
+    function get(index) {
+        if (index >= size()) throw RangeError(`Index ${index} is out of range.`);
+        let current = head;
+        for (var i = 0; i < index; i++) {
+            current = current.next;
+        }
 
         return current.data;
     }
