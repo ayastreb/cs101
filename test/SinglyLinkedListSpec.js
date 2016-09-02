@@ -84,3 +84,19 @@ test('throws error when trying to get item out of range', assert => {
     assert.throws(() => list.find(1), RangeError);
     assert.end();
 });
+
+test('iterate over list', assert => {
+    const list = SinglyLinkedList(['foo', 'bar', 'baz']);
+    assert.deepEqual([...list], ['baz', 'bar', 'foo']);
+    let counter = 0;
+    for (var item of list) {
+        assert.equal(typeof item, 'string');
+        counter++;
+    }
+    assert.equal(counter, 3);
+
+    const emptyList = SinglyLinkedList();
+    assert.deepEqual([...emptyList], []);
+
+    assert.end();
+});

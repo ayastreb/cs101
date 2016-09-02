@@ -37,7 +37,8 @@ module.exports = (array = []) => {
         pop,
         shift,
         unshift,
-        find
+        find,
+        [Symbol.iterator]: iterator,
     };
 
     /**
@@ -143,5 +144,16 @@ module.exports = (array = []) => {
         }
 
         return current.data;
+    }
+
+    /**
+     * Iterate over current list.
+     */
+    function* iterator() {
+        let current = head;
+        while (current !== null) {
+            yield current.data;
+            current = current.next;
+        }
     }
 };
