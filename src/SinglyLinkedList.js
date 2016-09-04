@@ -1,5 +1,7 @@
 /**
  * Singly Linked List is a linear data structure with sequential access.
+ * List consists of nodes, where each node links to the next node in the list.
+ * First node is called head, last node is called tail.
  *
  * Advantages:
  * - constant time add/remove item from the beginning of the list
@@ -20,9 +22,10 @@
  * list.removeFirst(); // => 'A', list = B->C
  * list.removeFirst(); // => 'B', list = C
  * list.addLast('D');  // => list = C->D
+ * list.find(1);       // => 'D'
  * list.removeFirst(); // => 'C', list = D
  * list.removeLast();  // => 'D', list = null
- * list.removeLast();  // => throws Error when trying to pop empty list
+ * list.removeLast();  // => throws Error when trying to remove from empty list
  *
  * @param {Array} input initial list data
  */
@@ -32,7 +35,7 @@ module.exports = (input = []) => {
         tail   = null;
 
     initialize(input);
-
+    /** Public interface */
     return {
         headNode,
         tailNode,
@@ -140,7 +143,7 @@ module.exports = (input = []) => {
      * @returns {*}
      */
     function removeFirst() {
-        if (head === null) throw RangeError("Can't pop from empty list.");
+        if (head === null) throw RangeError("Can't remove from empty list.");
         const item = head.data;
         head = head.next;
         if (head === null) tail = null;
@@ -156,7 +159,7 @@ module.exports = (input = []) => {
      * @returns {*}
      */
     function removeLast() {
-        if (head === null) throw RangeError("Can't shift from empty list.");
+        if (head === null) throw RangeError("Can't remove from empty list.");
         if (size() === 1) return removeFirst();
 
         let previous, current = head;
