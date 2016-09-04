@@ -100,3 +100,13 @@ test('iterate over list', assert => {
 
     assert.end();
 });
+
+test('insert item after given position', assert => {
+    const list = SinglyLinkedList(['foo', 'bar', 'baz']);
+    list.insertAfter(1, 'bad');// after 'bar'
+    assert.deepEqual([...list], ['baz', 'bar', 'bad', 'foo']);
+    list.insertAfter(3, 'bac');// after 'foo'
+    assert.deepEqual([...list], ['baz', 'bar', 'bad', 'foo', 'bac']);
+    assert.throws(() => list.insertAfter(4, 'too much'), RangeError);
+    assert.end();
+});

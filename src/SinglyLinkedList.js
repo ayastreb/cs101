@@ -38,7 +38,8 @@ module.exports = (array = []) => {
         shift,
         unshift,
         find,
-        [Symbol.iterator]: iterator,
+        insertAfter,
+        [Symbol.iterator]: iterator
     };
 
     /**
@@ -144,6 +145,27 @@ module.exports = (array = []) => {
         }
 
         return current.data;
+    }
+
+    /**
+     * Insert new item after given position.
+     *
+     * Performance: O(n)
+     * @param {Number} index
+     * @param {*} item
+     */
+    function insertAfter(index, item) {
+        if (index > size()) throw RangeError(`Index ${index} is out of range.`);
+        let current = head, previous;
+        for (var i = 0; i <= index; i++) {
+            previous = current;
+            current = current.next;
+        }
+
+        previous.next = {
+            data: item,
+            next: current
+        };
     }
 
     /**
