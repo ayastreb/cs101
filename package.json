@@ -4,7 +4,7 @@
   "description": "Basic data structures and algorithms implementation for educational purposes.",
   "main": "index.js",
   "scripts": {
-    "test": "tape test/**/*.js | faucet",
+    "test": "standard && tape test/**/*.js | faucet",
     "cover": "istanbul cover tape -- test/**/*.js && codeclimate-test-reporter < coverage/lcov.info"
   },
   "author": "Anatoliy Yastreb",
@@ -21,6 +21,7 @@
     "codeclimate-test-reporter": "^0.3.3",
     "faucet": "0.0.1",
     "istanbul": "^0.4.5",
+    "standard": "^8.0.0",
     "tape": "^4.6.0"
   }
 }
