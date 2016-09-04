@@ -189,9 +189,7 @@ module.exports = (input = []) => {
     if (index > size()) throw RangeError(`Index ${index} is out of range.`)
 
     let current = head
-    for (let i = 0; i < index; i++) {
-      current = current.next
-    }
+    for (let i = 0; i < index; i++) current = current.next
 
     current.next = {
       data: item,
