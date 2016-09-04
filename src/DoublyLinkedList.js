@@ -96,14 +96,10 @@ module.exports = (input = []) => {
     let current
     if (index < size() / 2) {
       current = head
-      for (let i = 0; i < index; i++) {
-        current = current.next
-      }
+      for (let i = 0; i < index; i++) current = current.next
     } else {
       current = tail
-      for (let i = size() - 1; i > index; i--) {
-        current = current.prev
-      }
+      for (let i = size() - 1; i > index; i--) current = current.prev
     }
 
     return current.data
@@ -119,7 +115,7 @@ module.exports = (input = []) => {
     head = {
       data: item,
       next: head,
-      prev: head === null ? null : head.prev
+      prev: null
     }
     if (tail === null) tail = head
     length++
