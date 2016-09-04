@@ -1,14 +1,14 @@
 /**
  * Singly Linked List is a linear data structure with sequential access.
- * Basic implementation without tail pointer.
  *
  * Advantages:
- * - constant time add/remove item from the beginning of the list (push/pop)
+ * - constant time add/remove item from the beginning of the list
+ * - constant time add to the end of the list
  * - less memory than Doubly Linked List
  * - simple implementation
  *
  * Disadvantages:
- * - linear time add/remove item from the end of the list (unshift/shift)
+ * - linear time remove item from the end of the list
  * - linear time search of item in the list
  * - reverse traversing is impossible
  * - more memory than Array
@@ -16,28 +16,32 @@
  * Usage:
  *
  * const SinglyLinkedList = require('SinglyLinkedList');
- * const list = SinglyLinkedList(['A', 'B', 'C']);
- * list.pop(); // => 'C'
- * list.pop(); // => 'B'
- * list.push('D');
- * list.pop(); // => 'D'
- * list.pop(); // => 'A'
- * list.pop(); // => throws Error when trying to pop empty list
+ * const list = SinglyLinkedList(['A', 'B', 'C']); // list = A->B->C
+ * list.removeFirst(); // => 'A', list = B->C
+ * list.removeFirst(); // => 'B', list = C
+ * list.addLast('D');  // => list = C->D
+ * list.removeFirst(); // => 'C', list = D
+ * list.removeLast();  // => 'D', list = null
+ * list.removeLast();  // => throws Error when trying to pop empty list
  *
- * @param {Array} array initial list data
+ * @param {Array} input initial list data
  */
-module.exports = (array = []) => {
-    let length = 0;
-    let head = null;
-    initialize(array);
+module.exports = (input = []) => {
+    let length = 0,
+        head   = null,
+        tail   = null;
+
+    initialize(input);
 
     return {
         size,
-        push,
-        pop,
-        shift,
-        unshift,
         find,
+        headNode,
+        tailNode,
+        addFirst,
+        addLast,
+        removeFirst,
+        removeLast,
         insertAfter,
         [Symbol.iterator]: iterator
     };
@@ -46,10 +50,10 @@ module.exports = (array = []) => {
      * Push all items of given array into the list.
      *
      * Performance: O(n)
-     * @param {Array} array input
+     * @param {Array} input initial list data
      */
-    function initialize(array) {
-        array.forEach(push);
+    function initialize(input) {
+        input.forEach(addLast);
     }
 
     /**
@@ -60,74 +64,6 @@ module.exports = (array = []) => {
      */
     function size() {
         return length;
-    }
-
-    /**
-     * Add new item to the beginning of the list.
-     *
-     * Performance: O(1)
-     * @param {*} item
-     */
-    function push(item) {
-        head = {
-            data: item,
-            next: head
-        };
-        length++;
-    }
-
-    /**
-     * Remove and return item from the beginning of the list.
-     *
-     * Performance: O(1)
-     * @returns {*}
-     */
-    function pop() {
-        if (head === null) throw RangeError("Can't pop from empty list.");
-        const item = head.data;
-        head = head.next;
-        length--;
-
-        return item;
-    }
-
-    /**
-     * Add item to the end of the list.
-     *
-     * Performance: O(n)
-     * @param {*} item
-     */
-    function unshift(item) {
-        if (head === null) return push(item);
-        let current = head;
-
-        while (current.next !== null) current = current.next;
-        current.next = {
-            data: item,
-            next: null
-        };
-        length++;
-    }
-
-    /**
-     * Remove and return item from the end of the list.
-     *
-     * Performance: O(n)
-     * @returns {*}
-     */
-    function shift() {
-        if (head === null) throw RangeError("Can't shift from empty list.");
-        if (size() === 1) return pop();
-
-        let previous, current = head;
-        while (current.next !== null) {
-            previous = current;
-            current = current.next;
-        }
-        previous.next = null;
-        length--;
-
-        return current.data;
     }
 
     /**
@@ -148,6 +84,93 @@ module.exports = (array = []) => {
     }
 
     /**
+     * Expose head node.
+     *
+     * @returns {Object} current head node
+     */
+    function headNode() {
+        return head;
+    }
+
+    /**
+     * Expose tail node.
+     *
+     * @returns {Object} current tail node
+     */
+    function tailNode() {
+        return tail;
+    }
+
+    /**
+     * Add new item to the beginning of the list.
+     *
+     * Performance: O(1)
+     * @param {*} item
+     */
+    function addFirst(item) {
+        head = {
+            data: item,
+            next: head
+        };
+        if (tail === null) tail = head;
+        length++;
+    }
+
+    /**
+     * Add new item to the end of the list.
+     *
+     * Performance: O(1)
+     * @param {*} item
+     */
+    function addLast(item) {
+        if (tail === null) return addFirst(item);
+        const node = {
+            data: item,
+            next: null
+        };
+        tail.next = node;
+        tail = node;
+        length++;
+    }
+
+    /**
+     * Remove and return item from the beginning of the list.
+     *
+     * Performance: O(1)
+     * @returns {*}
+     */
+    function removeFirst() {
+        if (head === null) throw RangeError("Can't pop from empty list.");
+        const item = head.data;
+        head = head.next;
+        if (head === null) tail = null;
+        length--;
+
+        return item;
+    }
+
+    /**
+     * Remove and return item from the end of the list.
+     *
+     * Performance: O(n)
+     * @returns {*}
+     */
+    function removeLast() {
+        if (head === null) throw RangeError("Can't shift from empty list.");
+        if (size() === 1) return removeFirst();
+
+        let previous, current = head;
+        while (current.next !== null) {
+            previous = current;
+            current = current.next;
+        }
+        previous.next = null;
+        length--;
+
+        return current.data;
+    }
+
+    /**
      * Insert new item after given position.
      *
      * Performance: O(n)
@@ -155,8 +178,11 @@ module.exports = (array = []) => {
      * @param {*} item
      */
     function insertAfter(index, item) {
+        if (index === 0) return addFirst(item);
+        if (index === size()) return addLast(item);
         if (index > size()) throw RangeError(`Index ${index} is out of range.`);
-        let current = head, previous;
+
+        let previous, current = head;
         for (let i = 0; i <= index; i++) {
             previous = current;
             current = current.next;
