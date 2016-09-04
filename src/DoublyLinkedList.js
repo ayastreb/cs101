@@ -195,7 +195,7 @@ module.exports = (input = []) => {
         current.next = {
             data: item,
             next: current.next,
-            prev: current.prev,
+            prev: current.prev
         };
     }
 

@@ -107,6 +107,7 @@ function runTestSuite(name, implementation) {
     test(`${name}: find item by position index`, assert => {
         const list = implementation(['foo', 'bar', 'baz']);
         assert.equal(list.find(0), 'foo');
+        assert.equal(list.find(1), 'bar');
         assert.equal(list.find(2), 'baz');
         list.addLast('bad');
         list.addLast('bac');
