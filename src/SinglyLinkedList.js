@@ -34,10 +34,10 @@ module.exports = (input = []) => {
     initialize(input);
 
     return {
-        size,
-        find,
         headNode,
         tailNode,
+        size,
+        find,
         addFirst,
         addLast,
         removeFirst,
@@ -54,6 +54,24 @@ module.exports = (input = []) => {
      */
     function initialize(input) {
         input.forEach(addLast);
+    }
+
+    /**
+     * Expose head node.
+     *
+     * @returns {Object} current head node
+     */
+    function headNode() {
+        return head;
+    }
+
+    /**
+     * Expose tail node.
+     *
+     * @returns {Object} current tail node
+     */
+    function tailNode() {
+        return tail;
     }
 
     /**
@@ -81,24 +99,6 @@ module.exports = (input = []) => {
         }
 
         return current.data;
-    }
-
-    /**
-     * Expose head node.
-     *
-     * @returns {Object} current head node
-     */
-    function headNode() {
-        return head;
-    }
-
-    /**
-     * Expose tail node.
-     *
-     * @returns {Object} current tail node
-     */
-    function tailNode() {
-        return tail;
     }
 
     /**

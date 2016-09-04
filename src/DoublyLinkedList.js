@@ -1,55 +1,24 @@
-module.exports = (array = []) => {
+module.exports = (input = []) => {
     let length = 0;
     let head = null;
     let tail = null;
-    initialize(array);
+
+    initialize(input);
 
     return {
-        size,
         headNode,
         tailNode,
-        push,
-        pop,
-        unshift,
-        shift,
+        size,
         find,
+        addFirst,
+        addLast,
+        removeFirst,
+        removeLast,
         insertAfter,
-        insertBefore
+        [Symbol.iterator]: iterator
     };
 
-    function initialize(array) {
-
-    }
-
-    function size() {
-        return length;
-    }
-
-    function push() {
-
-    }
-
-    function pop() {
-
-    }
-
-    function unshift(item) {
-
-    }
-
-    function shift() {
-
-    }
-
-    function find(index) {
-
-    }
-
-    function insertAfter(node, item) {
-
-    }
-
-    function insertBefore(node, item) {
+    function initialize(input) {
 
     }
 
@@ -59,5 +28,37 @@ module.exports = (array = []) => {
 
     function tailNode() {
         return tail;
+    }
+
+    function size() {
+        return length;
+    }
+
+    function find(index) {
+
+    }
+
+    function addFirst(item) {
+
+    }
+
+    function addLast(item) {
+
+    }
+
+    function removeFirst() {
+
+    }
+
+    function removeLast() {
+
+    }
+
+    function insertAfter(node, item) {
+
+    }
+
+    function iterator() {
+
     }
 };
