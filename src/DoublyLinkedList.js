@@ -3,6 +3,11 @@
  * List consists of nodes, where each node links to the next and previous node in the list.
  * First node is called head, last node is called tail.
  *
+ * Application:
+ * Doubly linked list can be used to implement Deque - a queue, where you can add and remove from both ends.
+ * It is also in places used where you need to switch back and forward between the items:
+ * undo/redo implementations, back/forward in browser history, etc.
+ *
  * Advantages:
  * - constant time add/remove item from the beginning and from the end of the list
  * - search is ~2x faster than singly linked list

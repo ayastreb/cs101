@@ -3,6 +3,12 @@
  * List consists of nodes, where each node links to the next node in the list.
  * First node is called head, last node is called tail.
  *
+ * Application:
+ * Singly linked list can be used to represent any sequential data.
+ * Singly linked list is often used to implement stacks and queues.
+ * It can also be used in a Hash table implementation to store chain of items
+ * that hash to the same position in the hash table.
+ *
  * Advantages:
  * - constant time add/remove item from the beginning of the list
  * - constant time add to the end of the list
