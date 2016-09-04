@@ -140,7 +140,7 @@ module.exports = (array = []) => {
     function find(index) {
         if (index >= size()) throw RangeError(`Index ${index} is out of range.`);
         let current = head;
-        for (var i = 0; i < index; i++) {
+        for (let i = 0; i < index; i++) {
             current = current.next;
         }
 
@@ -157,7 +157,7 @@ module.exports = (array = []) => {
     function insertAfter(index, item) {
         if (index > size()) throw RangeError(`Index ${index} is out of range.`);
         let current = head, previous;
-        for (var i = 0; i <= index; i++) {
+        for (let i = 0; i <= index; i++) {
             previous = current;
             current = current.next;
         }
