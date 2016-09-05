@@ -19,8 +19,8 @@
  *
  * Usage:
  *
- * const DoublyLinkedList = require('DoublyLinkedList')
- * const list = DoublyLinkedList(['A', 'B', 'C']) // list = A->B->C
+ * const createDoublyLinkedList = require('./DoublyLinkedList')
+ * const list = createDoublyLinkedList(['A', 'B', 'C']) // list = A->B->C
  * list.removeFirst() // => 'A', list = B->C
  * list.removeFirst() // => 'B', list = C
  * list.addLast('D')  // => list = C->D

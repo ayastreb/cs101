@@ -23,8 +23,8 @@
  *
  * Usage:
  *
- * const SinglyLinkedList = require('SinglyLinkedList')
- * const list = SinglyLinkedList(['A', 'B', 'C']) // list = A->B->C
+ * const createSinglyLinkedList = require('./SinglyLinkedList')
+ * const list = createSinglyLinkedList(['A', 'B', 'C']) // list = A->B->C
  * list.removeFirst() // => 'A', list = B->C
  * list.removeFirst() // => 'B', list = C
  * list.addLast('D')  // => list = C->D

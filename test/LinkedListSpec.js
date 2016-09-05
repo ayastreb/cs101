@@ -1,12 +1,12 @@
 const test = require('tape')
-const SinglyLinkedList = require('../src/SinglyLinkedList')
-const DoublyLinkedList = require('../src/DoublyLinkedList')
+const createSinglyLinkedList = require('../src/SinglyLinkedList')
+const createDoublyLinkedList = require('../src/DoublyLinkedList')
 /**
  * Singly and doubly linked lists have the same interface and functionality, but different implementation.
  * That's why we want to run the same test suite on both implementations.
  */
-runTestSuite('Singly Linked', SinglyLinkedList)
-runTestSuite('Doubly Linked', DoublyLinkedList)
+runTestSuite('Singly Linked', createSinglyLinkedList)
+runTestSuite('Doubly Linked', createDoublyLinkedList)
 
 function runTestSuite (name, implementation) {
   test(`${name}: create empty list`, assert => {
