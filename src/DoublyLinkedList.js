@@ -64,6 +64,7 @@ module.exports = (input = []) => {
   /**
    * Expose head node.
    *
+   * Performance: O(1)
    * @returns {Object} current head node
    */
   function headNode () {
@@ -73,6 +74,7 @@ module.exports = (input = []) => {
   /**
    * Expose tail node.
    *
+   * Performance: O(1)
    * @returns {Object} current tail node
    */
   function tailNode () {
@@ -90,7 +92,10 @@ module.exports = (input = []) => {
   }
 
   /**
-   * Find item at given position from the beginning of the list.
+   * Find item at the given position from the beginning of the list.
+   * Position is a 0-based index:
+   * A->B->C->D
+   * 0  1  2  3
    *
    * Performance: O(n)
    * @param {Number} index position of queried item
