@@ -6,6 +6,18 @@ const createSinglyLinkedList = require('./SinglyLinkedList')
  * Application:
  * Queues are used to process buffers and events.
  *
+ * Usage:
+ * const createQueue = require('./Queue')
+ * const queue = createQueue([ 'A', 'B', 'C' ]) // queue = A->B->C
+ * queue.peek() // => 'A', queue = A->B->C
+ * queue.enqueue('D') // queue = A->B->C->D
+ * queue.dequeue() // => 'A', queue = B->C->D
+ * queue.dequeue() // => 'B', queue = C->D
+ * queue.size() // => 2, queue = C->D
+ * queue.dequeue() // => 'C', queue = D
+ * queue.dequeue() // => 'D', queue = null
+ * queue.dequeue() // throws RangeError when trying to dequeue empty queue
+ *
  * @param {Array} input initial queue data
  */
 module.exports = (input = []) => {

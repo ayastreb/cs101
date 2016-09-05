@@ -20,14 +20,14 @@
  * Usage:
  *
  * const createDoublyLinkedList = require('./DoublyLinkedList')
- * const list = createDoublyLinkedList(['A', 'B', 'C']) // list = A->B->C
+ * const list = createDoublyLinkedList([ 'A', 'B', 'C' ]) // list = A->B->C
  * list.removeFirst() // => 'A', list = B->C
  * list.removeFirst() // => 'B', list = C
  * list.addLast('D')  // => list = C->D
  * list.find(1)       // => 'D'
  * list.removeFirst() // => 'C', list = D
  * list.removeLast()  // => 'D', list = null
- * list.removeLast()  // => throws Error when trying to remove from empty list
+ * list.removeLast()  // => throws RangeError when trying to remove from empty list
  *
  * @param {Array} input initial list data
  */
