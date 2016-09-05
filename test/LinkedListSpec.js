@@ -1,7 +1,10 @@
 const test = require('tape')
 const SinglyLinkedList = require('../src/SinglyLinkedList')
 const DoublyLinkedList = require('../src/DoublyLinkedList')
-
+/**
+ * Singly and doubly linked lists have the same interface and functionality, but different implementation.
+ * That's why we want to run the same test suite on both implementations.
+ */
 runTestSuite('Singly Linked', SinglyLinkedList)
 runTestSuite('Doubly Linked', DoublyLinkedList)
 

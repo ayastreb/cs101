@@ -5,7 +5,7 @@
  *
  * Application:
  * Doubly linked list can be used to implement Deque - a queue, where you can add and remove from both ends.
- * It is also in places used where you need to switch back and forward between the items:
+ * It is also used in places where you need to switch back and forward between the items:
  * undo/redo implementations, back/forward in browser history, etc.
  *
  * Advantages:
