@@ -36,7 +36,7 @@ module.exports = (input = []) => {
    * Get current stack size.
    *
    * Performance: O(1)
-   * @returns {Number}
+   * @returns {number}
    */
   function size () {
     return list.size()
@@ -46,17 +46,17 @@ module.exports = (input = []) => {
    * Return top element of the stack without removing it.
    *
    * Performance: O(1)
-   * @returns {Object}
+   * @returns {*}
    */
   function peek () {
-    return list.headNode().data
+    return list.size() > 0 ? list.headNode().data : null
   }
 
   /**
    * Add new item to the stack.
    *
    * Performance: O(1)
-   * @param {Object} item
+   * @param {*} item
    */
   function push (item) {
     list.addFirst(item)
@@ -66,9 +66,10 @@ module.exports = (input = []) => {
    * Remove and return top item from the stack.
    *
    * Performance: O(1)
-   * @returns {Object}
+   * @returns {*}
    */
   function pop () {
+    if (list.size() === 0) throw RangeError("Can't pop from empty stack.")
     return list.removeFirst()
   }
 }
