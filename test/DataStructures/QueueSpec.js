@@ -1,5 +1,5 @@
 const test = require('tape')
-const createQueue = require('../src/Queue')
+const createQueue = require('../../src/DataStructures/Queue')
 
 test('peek on empty queue', assert => {
   const queue = createQueue()
