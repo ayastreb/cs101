@@ -20,10 +20,10 @@
  * Usage:
  *
  * const createDoublyLinkedList = require('./DoublyLinkedList')
- * const list = createDoublyLinkedList([ 'A', 'B', 'C' ]) // list = A->B->C
- * list.removeFirst() // => 'A', list = B->C
+ * const list = createDoublyLinkedList([ 'A', 'B', 'C' ]) // list = A<->B<->C
+ * list.removeFirst() // => 'A', list = B<->C
  * list.removeFirst() // => 'B', list = C
- * list.addLast('D')  // => list = C->D
+ * list.addLast('D')  // => list = C<->D
  * list.find(1)       // => 'D'
  * list.removeFirst() // => 'C', list = D
  * list.removeLast()  // => 'D', list = null
@@ -94,7 +94,7 @@ module.exports = (input = []) => {
   /**
    * Find item at the given position from the beginning of the list.
    * Position is a 0-based index:
-   * A->B->C->D
+   * A<->B<->C<->D
    * 0  1  2  3
    *
    * Performance: O(n)
