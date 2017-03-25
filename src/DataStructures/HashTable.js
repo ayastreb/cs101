@@ -1,4 +1,5 @@
 const stringHash = require('../StringHash')
+const createLinkedList = require('./SinglyLinkedList')
 /**
  * Hash table is basic data structure used to implement associative array,
  * mapping keys to values. It uses a hash function to compute an index of array
@@ -20,8 +21,6 @@ const stringHash = require('../StringHash')
  * @param input
  * @param {Function} hashFunc
  */
-
-// TODO: implement collision handling
 module.exports = (hashFunc = stringHash) => {
   let length = 0
   let table = []
@@ -53,11 +52,16 @@ module.exports = (hashFunc = stringHash) => {
   function set (key, value) {
     validateKey(key)
     const index = hashFunc(key)
-    if (table[ index ] === undefined) length++
-    table[ index ] = {
-      key: key,
-      value: value
+    if (!table[ index ]) table[ index ] = createLinkedList()
+
+    for (let item of table[ index ]) {
+      if (item.key === key) {
+        item.value = value
+        return
+      }
     }
+    table[ index ].addLast({ key: key, value: value })
+    length++
   }
 
   /**
@@ -69,9 +73,12 @@ module.exports = (hashFunc = stringHash) => {
    */
   function get (key) {
     validateKey(key)
-
     const index = hashFunc(key)
-    if (table[ index ] !== undefined) return table[ index ].value
+    if (!table[ index ]) return null
+
+    for (let item of table[ index ]) {
+      if (item.key === key) return item.value
+    }
 
     return null
   }
@@ -84,11 +91,9 @@ module.exports = (hashFunc = stringHash) => {
    * @returns {Boolean} true if value was found, false otherwise
    */
   function remove (key) {
-    validateKey(key)
+    if (get(key) === null) return false
 
-    const index = hashFunc(key)
-    if (table[ index ] === undefined) return false
-    table[ index ] = undefined
+    set(key, null)
     length--
     return true
   }

@@ -1,63 +1,69 @@
 const test = require('tape')
 const createHashTable = require('../../src/DataStructures/HashTable')
 
-test('create empty table', assert => {
-  const hashTable = createHashTable()
+runTestSuite('StringHash', undefined) // use default string hash function
+runTestSuite('AlwaysCollide', () => { return 1 }) // hash all keys to the same index
 
-  assert.equal(hashTable.size(), 0)
-  assert.end()
-})
+function runTestSuite (name, hashFunc) {
+  test(`${name}: create empty table`, assert => {
+    const hashTable = createHashTable(hashFunc)
 
-test('throw error when key is invalid', assert => {
-  const hashTable = createHashTable()
+    assert.equal(hashTable.size(), 0)
+    assert.end()
+  })
 
-  assert.throws(() => hashTable.set(undefined, 'foo'), TypeError)
-  assert.throws(() => hashTable.set([ 'bar' ], 'foo'), TypeError)
-  assert.throws(() => hashTable.set({ foo: 'baz' }, 'foo'), TypeError)
-  assert.end()
-})
+  test(`${name}: throw error when key is invalid`, assert => {
+    const hashTable = createHashTable(hashFunc)
 
-test('add element to the table', assert => {
-  const hashTable = createHashTable()
+    assert.throws(() => hashTable.set(undefined, 'foo'), TypeError)
+    assert.throws(() => hashTable.set([ 'bar' ], 'foo'), TypeError)
+    assert.throws(() => hashTable.set({ foo: 'baz' }, 'foo'), TypeError)
+    assert.end()
+  })
 
-  hashTable.set('foo', 'bar')
-  assert.equal(hashTable.size(), 1)
-  assert.end()
-})
+  test(`${name}: add element to the table`, assert => {
+    const hashTable = createHashTable(hashFunc)
 
-test('get element from the table', assert => {
-  const hashTable = createHashTable()
+    hashTable.set('foo', 'bar')
+    assert.equal(hashTable.size(), 1)
+    assert.end()
+  })
 
-  assert.equal(hashTable.get('baz'), null)
-  hashTable.set('foo', 'bar')
-  assert.equal(hashTable.get('foo'), 'bar')
-  hashTable.set(10, 'bat')
-  assert.equal(hashTable.get(10), 'bat')
-  assert.end()
-})
+  test(`${name}: get element from the table`, assert => {
+    const hashTable = createHashTable(hashFunc)
 
-test('element is unique by key', assert => {
-  const hashTable = createHashTable()
+    assert.equal(hashTable.get('baz'), null)
+    hashTable.set('foo', 'bar')
+    assert.equal(hashTable.get('foo'), 'bar')
+    assert.equal(hashTable.get('bat'), null)
+    hashTable.set(10, 'bat')
+    assert.equal(hashTable.get(10), 'bat')
+    assert.end()
+  })
 
-  hashTable.set('foo', 'bar')
-  hashTable.set('fee', 'ber')
-  assert.equal(hashTable.get('foo'), 'bar')
-  assert.equal(hashTable.size(), 2)
-  hashTable.set('foo', 'baz')
-  assert.equal(hashTable.get('foo'), 'baz')
-  assert.equal(hashTable.get('fee'), 'ber')
-  assert.equal(hashTable.size(), 2)
-  assert.end()
-})
+  test(`${name}: element is unique by key`, assert => {
+    const hashTable = createHashTable(hashFunc)
 
-test('remove element from the table', assert => {
-  const hashTable = createHashTable()
+    hashTable.set('foo', 'bar')
+    hashTable.set('fee', 'ber')
+    assert.equal(hashTable.get('foo'), 'bar')
+    assert.equal(hashTable.size(), 2)
+    hashTable.set('foo', 'baz')
+    assert.equal(hashTable.get('foo'), 'baz')
+    assert.equal(hashTable.get('fee'), 'ber')
+    assert.equal(hashTable.size(), 2)
+    assert.end()
+  })
 
-  hashTable.set('foo', 'bar')
-  assert.equal(hashTable.size(), 1)
-  assert.equal(hashTable.remove('fee'), false)
-  assert.equal(hashTable.remove('foo'), true)
-  assert.equal(hashTable.size(), 0)
-  assert.equal(hashTable.remove('foo'), false)
-  assert.end()
-})
+  test(`${name}: remove element from the table`, assert => {
+    const hashTable = createHashTable(hashFunc)
+
+    hashTable.set('foo', 'bar')
+    assert.equal(hashTable.size(), 1)
+    assert.equal(hashTable.remove('fee'), false)
+    assert.equal(hashTable.remove('foo'), true)
+    assert.equal(hashTable.size(), 0)
+    assert.equal(hashTable.remove('foo'), false)
+    assert.end()
+  })
+}
