@@ -22,8 +22,8 @@ const createLinkedList = require('./SinglyLinkedList')
  * @param {Function} hashFunc
  */
 module.exports = (hashFunc = stringHash) => {
+  const table = []
   let length = 0
-  let table = []
 
   return {
     size,
