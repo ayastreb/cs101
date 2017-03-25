@@ -60,7 +60,7 @@ module.exports = (hashFunc = stringHash) => {
         return
       }
     }
-    table[ index ].addLast({ key: key, value: value })
+    table[ index ].addLast({ key, value })
     length++
   }
 
