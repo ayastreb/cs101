@@ -61,7 +61,7 @@ module.exports = (input = []) => {
    * @returns {*}
    */
   function peek () {
-    return list.size() > 0 ? list.headNode().data : null
+    return list.showFirst()
   }
 
   /**

@@ -12,8 +12,8 @@ function runTestSuite (name, implementation) {
   test(`${name}: create empty list`, assert => {
     const list = implementation()
     assert.equal(list.size(), 0)
-    assert.equal(list.headNode(), null)
-    assert.equal(list.tailNode(), null)
+    assert.equal(list.showFirst(), null)
+    assert.equal(list.showLast(), null)
     assert.end()
   })
 
@@ -22,8 +22,8 @@ function runTestSuite (name, implementation) {
     list.addFirst('foo')
     list.addFirst('bar')
     assert.equal(list.size(), 2)
-    assert.equal(list.tailNode().data, 'foo')
-    assert.equal(list.headNode().data, 'bar')
+    assert.equal(list.showLast(), 'foo')
+    assert.equal(list.showFirst(), 'bar')
     assert.end()
   })
 
@@ -33,8 +33,8 @@ function runTestSuite (name, implementation) {
     list.addFirst('bar')
     assert.equal(list.removeFirst(), 'bar')
     assert.equal(list.removeFirst(), 'foo')
-    assert.equal(list.headNode(), null)
-    assert.equal(list.tailNode(), null)
+    assert.equal(list.showFirst(), null)
+    assert.equal(list.showLast(), null)
     assert.equal(list.size(), 0)
     assert.end()
   })
@@ -56,8 +56,8 @@ function runTestSuite (name, implementation) {
     assert.equal(list.removeLast(), 'bar')
     assert.equal(list.removeLast(), 'baz')
     assert.equal(list.removeLast(), 'foo')
-    assert.equal(list.headNode(), null)
-    assert.equal(list.tailNode(), null)
+    assert.equal(list.showFirst(), null)
+    assert.equal(list.showLast(), null)
     assert.end()
   })
 

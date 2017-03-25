@@ -76,7 +76,7 @@ module.exports = (input = []) => {
    * @returns {*}
    */
   function first () {
-    return list.size() > 0 ? list.headNode().data : null
+    return list.showFirst()
   }
 
   /**
@@ -86,7 +86,7 @@ module.exports = (input = []) => {
    * @returns {*}
    */
   function last () {
-    return list.size() > 0 ? list.tailNode().data : null
+    return list.showLast()
   }
 
   /**

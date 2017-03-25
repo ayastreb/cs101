@@ -43,14 +43,14 @@ module.exports = (input = []) => {
   initialize(input)
   /** Public interface */
   return {
-    headNode,
-    tailNode,
     size,
     find,
     addFirst,
     addLast,
     removeFirst,
     removeLast,
+    showFirst,
+    showLast,
     insertAfter,
     [Symbol.iterator]: iterator
   }
@@ -63,26 +63,6 @@ module.exports = (input = []) => {
    */
   function initialize (input) {
     input.forEach(addLast)
-  }
-
-  /**
-   * Expose head node.
-   *
-   * Performance: O(1)
-   * @returns {Object} current head node
-   */
-  function headNode () {
-    return head
-  }
-
-  /**
-   * Expose tail node.
-   *
-   * Performance: O(1)
-   * @returns {Object} current tail node
-   */
-  function tailNode () {
-    return tail
   }
 
   /**
@@ -181,6 +161,26 @@ module.exports = (input = []) => {
     length--
 
     return current.data
+  }
+
+  /**
+   * Retrieve first item data.
+   *
+   * Performance: O(1)
+   * @returns {*}
+   */
+  function showFirst () {
+    return head ? head.data : null
+  }
+
+  /**
+   * Retrieve last item data.
+   *
+   * Performance: O(1)
+   * @returns {*}
+   */
+  function showLast () {
+    return tail ? tail.data : null
   }
 
   /**
