@@ -1,5 +1,5 @@
 const test = require('tape')
-const createStack = require('../../src/DataStructures/Stack')
+const createStack = require('./Stack')
 
 test('peek on empty stack', assert => {
   const stack = createStack()

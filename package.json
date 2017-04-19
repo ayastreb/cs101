@@ -4,8 +4,8 @@
   "description": "Basic data structures and algorithms implementation for educational purposes.",
   "main": "index.js",
   "scripts": {
-    "test": "standard && tape test/**/*.js | faucet",
-    "cover": "istanbul cover tape -- test/**/*.js && codeclimate-test-reporter < coverage/lcov.info"
+    "test": "standard && tape src/**/*.test.js | faucet",
+    "cover": "istanbul cover tape -- src/**/*.test.js && codeclimate-test-reporter < coverage/lcov.info"
   },
   "author": "Anatoliy Yastreb",
   "license": "MIT",

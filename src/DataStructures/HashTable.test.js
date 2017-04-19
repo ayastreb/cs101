@@ -1,5 +1,5 @@
 const test = require('tape')
-const createHashTable = require('../../src/DataStructures/HashTable')
+const createHashTable = require('./HashTable')
 
 runTestSuite('StringHash', undefined) // use default string hash function
 runTestSuite('AlwaysCollide', () => { return 1 }) // hash all keys to the same index

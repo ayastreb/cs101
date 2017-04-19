@@ -1,5 +1,5 @@
 const test = require('tape')
-const createDeque = require('../../src/DataStructures/Deque')
+const createDeque = require('./Deque')
 
 test('create empty deque', assert => {
   const deque = createDeque()

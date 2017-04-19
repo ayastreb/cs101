@@ -18,7 +18,6 @@ const createLinkedList = require('./SinglyLinkedList')
  * hashTable.remove('A') // => true
  * hashTable.get('A') // => null
  *
- * @param input
  * @param {Function} hashFunc
  */
 module.exports = (hashFunc = stringHash) => {
