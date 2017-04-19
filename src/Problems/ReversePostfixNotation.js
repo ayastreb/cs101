@@ -48,7 +48,7 @@ module.exports = input => {
    * @param {String} input
    */
   function validate (input) {
-    if (!/^[0-9+\-\/*^\s.]+$/.test(input)) {
+    if (!/^[0-9+\-/*^\s.]+$/.test(input)) {
       throw new TypeError('Invalid input!')
     }
   }
