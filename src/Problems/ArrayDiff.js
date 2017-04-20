@@ -15,16 +15,11 @@ const createHashTable = require('../DataStructures/HashTable')
  */
 module.exports = (first, second) => {
   const unique = createHashTable()
-  const merged = []
-  const merge = input => {
-    for (let item of input) {
-      merged.push(item)
+
+  return first.concat(second)
+    .map(item => {
       unique.set(item, !unique.get(item))
-    }
-  }
-
-  merge(first)
-  merge(second)
-
-  return merged.filter(item => unique.get(item))
+      return item
+    })
+    .filter(item => unique.get(item))
 }
