@@ -30,7 +30,7 @@ module.exports = class Tree {
    * If we want to keep track of node's size, depth and height - we need to
    * update all parent nodes when we insert new one.
    *
-   * Performance: O(log(n)) for balanced tree, O(n) for unbalanced tree
+   * Performance: O(h) where `h` is height of the parent tree
    * @param {string|number} label
    * @returns {Tree}
    */
