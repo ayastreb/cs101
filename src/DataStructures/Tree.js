@@ -19,18 +19,33 @@ module.exports = class Tree {
   constructor (label) {
     this.label = label
     this.children = []
+    this.parent = null
+    this.size = 1
+    this.height = 0
+    this.depth = 0
   }
 
   /**
    * Insert new node to the tree with given label and return this new node.
+   * If we want to keep track of node's size, depth and height - we need to
+   * update all parent nodes when we insert new one.
    *
-   * Performance: O(1)
+   * Performance: O(log(n)) for balanced tree, O(n) for unbalanced tree
    * @param {string|number} label
    * @returns {Tree}
    */
   insert (label) {
     const child = new Tree(label)
+    child.parent = this
     this.children.push(child)
+
+    let parent = child.parent
+    while (parent !== null) {
+      parent.size += 1
+      child.depth += 1
+      parent.height = Math.max(parent.height, child.depth)
+      parent = parent.parent
+    }
 
     return child
   }
@@ -71,27 +86,5 @@ module.exports = class Tree {
 
       node.children.reverse().forEach(child => stack.push(child))
     }
-  }
-
-  /**
-   * Calculate size of the tree by visiting all children and summing up.
-   *
-   * Performance: O(n)
-   * @returns {number}
-   */
-  get length () {
-    return this.children.reduce((size, child) => size + child.length, 1)
-  }
-
-  /**
-   * Calculate height of the tree, e.g. distance from root to its furthest leaf.
-   *
-   * Performance: O(n)
-   * @returns {number}
-   */
-  get height () {
-    if (this.children.length === 0) return 1
-
-    return 1 + Math.max(...this.children.map(child => child.height))
   }
 }
