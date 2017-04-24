@@ -10,22 +10,12 @@ const createStack = require('./Stack')
  *
  * @type {BinarySearchTree}
  */
-module.exports = class {
-  /**
-   * Build binary search tree from given initial input,
-   * which can be either single value or an array of values.
-   *
-   * Performance: O(n*log(n)) on average
-   * @param {string|number|Array} input
-   */
-  constructor (input) {
-    if (!input.length) throw new TypeError('Initial value is required!')
-    if (Array.isArray(input)) {
-      this.root = new Node(input.shift())
-      for (let item of input) this.insert(item)
-    } else {
-      this.root = new Node(input)
-    }
+module.exports = class BinarySearchTree {
+  constructor (value) {
+    if (value === undefined) throw new TypeError('Initial value is required!')
+    this.value = value
+    this.left = null
+    this.right = null
   }
 
   /**
@@ -35,15 +25,21 @@ module.exports = class {
    * @param {string|number} value
    */
   insert (value) {
-    let parent, direction
-    let node = this.root
-    while (node) {
-      parent = node
-      direction = value < node.value ? 'left' : 'right'
-      node = node[ direction ]
+    let parent
+    let current = this
+    while (current) {
+      parent = current
+      current = value < current.value ? current.left : current.right
     }
 
-    parent[ direction ] = new Node(value)
+    const child = new BinarySearchTree(value)
+    if (value < parent.value) {
+      parent.left = child
+    } else {
+      parent.right = child
+    }
+
+    return child
   }
 
   /**
@@ -54,10 +50,10 @@ module.exports = class {
    * @returns {boolean}
    */
   find (value) {
-    let node = this.root
-    while (node) {
-      if (value === node.value) return true
-      node = value < node.value ? node.left : node.right
+    let current = this
+    while (current) {
+      if (value === current.value) return true
+      current = value < current.value ? current.left : current.right
     }
 
     return false
@@ -69,18 +65,18 @@ module.exports = class {
    * right-most nodes.
    *
    * Performance: O(n)
-   * @param {function} callback
+   * @param {function} fn
    */
-  traverseInOrder (callback) {
+  traverseInOrder (fn) {
     const visit = node => {
       if (node) {
         visit(node.left)
-        callback(node.value)
+        fn(node.value)
         visit(node.right)
       }
     }
 
-    visit(this.root)
+    visit(this)
   }
 
   /**
@@ -91,7 +87,7 @@ module.exports = class {
    */
   *[Symbol.iterator] () {
     const stack = createStack()
-    let node = this.root
+    let node = this
     while (stack.size() > 0 || node) {
       if (node) {
         stack.push(node)
@@ -102,13 +98,5 @@ module.exports = class {
         node = node.right
       }
     }
-  }
-}
-
-class Node {
-  constructor (value) {
-    this.value = value
-    this.left = null
-    this.right = null
   }
 }
