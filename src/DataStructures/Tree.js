@@ -7,22 +7,26 @@ const createStack = require('./Stack')
  *
  * Trees are used to represent hierarchy (e.g. disk file system or class inheritance)
  * and also could be used for search (e.g. Binary Search Tree).
- *
- * @type {Tree}
  */
-module.exports = class Tree {
-  /**
-   * Create new tree root with given label.
-   *
-   * @param {string|number} label
-   */
-  constructor (label) {
-    this.label = label
-    this.children = []
-    this.parent = null
-    this.size = 1
-    this.height = 0
-    this.depth = 0
+module.exports = createTree
+
+function createTree (input) {
+  const children = []
+  let parent = null
+  let size = 1
+  let height = 0
+  let depth = 0
+
+  return {
+    label: input,
+    children,
+    parent,
+    size,
+    height,
+    depth,
+    insert,
+    traverseBFS,
+    traverseDFS
   }
 
   /**
@@ -31,13 +35,13 @@ module.exports = class Tree {
    * update all parent nodes when we insert new one.
    *
    * Performance: O(h) where `h` is height of the parent tree
-   * @param {string|number} label
-   * @returns {Tree}
+   * @param {string|number} value
+   * @returns {object}
    */
-  insert (label) {
-    const child = new Tree(label)
+  function insert (value) {
+    const child = createTree(value)
     child.parent = this
-    this.children.push(child)
+    children.push(child)
 
     let parent = child.parent
     while (parent !== null) {
@@ -55,15 +59,15 @@ module.exports = class Tree {
    * node label. Stop traversing if callback returns `false`.
    *
    * Performance: O(n)
-   * @param {function} callback
+   * @param {function} fn
    */
-  traverseBFS (callback) {
+  function traverseBFS (fn) {
     const queue = createQueue()
     queue.enqueue(this)
 
     while (queue.length > 0) {
       const node = queue.dequeue()
-      if (callback(node.label) === false) return
+      if (fn(node.label) === false) return
 
       node.children.forEach(child => queue.enqueue(child))
     }
@@ -74,15 +78,15 @@ module.exports = class Tree {
    * node label. Stop traversing if callback returns `false`.
    *
    * Performance: O(n)
-   * @param callback
+   * @param fn
    */
-  traverseDFS (callback) {
+  function traverseDFS (fn) {
     const stack = createStack()
     stack.push(this)
 
     while (stack.length > 0) {
       const node = stack.pop()
-      if (callback(node.label) === false) return
+      if (fn(node.label) === false) return
 
       node.children.reverse().forEach(child => stack.push(child))
     }

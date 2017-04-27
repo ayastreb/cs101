@@ -1,5 +1,5 @@
 const test = require('tape')
-const BinarySearchTree = require('../DataStructures/BinarySearchTree')
+const createBinarySearchTree = require('../DataStructures/BinarySearchTree')
 const levelOrderTraversal = require('./LevelOrderTraversal')
 
 test('traverse tree by level order', assert => {
@@ -12,7 +12,7 @@ test('traverse tree by level order', assert => {
    *         / \
    *       (E) (G)
    */
-  const tree = new BinarySearchTree('C')
+  const tree = createBinarySearchTree('C')
   tree.insert('A')
   tree.insert('B')
   tree.insert('D')

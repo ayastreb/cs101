@@ -1,16 +1,16 @@
 const test = require('tape')
-const BinarySearchTree = require('./BinarySearchTree')
+const createBinarySearchTree = require('./BinarySearchTree')
 
 test('throw error when no input given', assert => {
   assert.throws(() => {
-    const tree = new BinarySearchTree()
+    const tree = createBinarySearchTree()
     tree.find('A')
   }, TypeError)
   assert.end()
 })
 
 test('find in tree with strings', assert => {
-  const tree = new BinarySearchTree('A')
+  const tree = createBinarySearchTree('A')
   tree.insert('B')
 
   assert.equals(tree.find('B'), true)
@@ -21,7 +21,7 @@ test('find in tree with strings', assert => {
 
 test('find in tree with duplicates', assert => {
   const input = [ 10, 27, 3, 1, 3, 3, -0.5 ]
-  const tree = new BinarySearchTree(input.shift())
+  const tree = createBinarySearchTree(input.shift())
   input.forEach(value => tree.insert(value))
 
   assert.equals(tree.find(3), true)
@@ -32,7 +32,7 @@ test('find in tree with duplicates', assert => {
 
 test('traverse tree in order', assert => {
   const input = [ 2, 18, 4, -5, 3.33, 2, 25, 1, -11 ]
-  const tree = new BinarySearchTree(input.shift())
+  const tree = createBinarySearchTree(input.shift())
   input.forEach(value => tree.insert(value))
   const traversed = []
   tree.traverseInOrder(item => traversed.push(item))
@@ -43,7 +43,7 @@ test('traverse tree in order', assert => {
 
 test('traverse tree using iterator', assert => {
   const input = [ 2, 18, 4, -5, 3.33, 2, 25, 1, -11 ]
-  const tree = new BinarySearchTree(input.shift())
+  const tree = createBinarySearchTree(input.shift())
   input.forEach(value => tree.insert(value))
 
   assert.deepEquals([ ...tree ], [ -11, -5, 1, 2, 2, 3.33, 4, 18, 25 ])

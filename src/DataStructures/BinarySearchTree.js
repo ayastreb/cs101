@@ -8,14 +8,24 @@ const createStack = require('./Stack')
  * inserting or looking up values.
  * In order depth first search of a binary tree results in sorted input values.
  *
- * @type {BinarySearchTree}
+ * @type {createBinarySearchTree}
  */
-module.exports = class BinarySearchTree {
-  constructor (value) {
-    if (value === undefined) throw new TypeError('Initial value is required!')
-    this.value = value
-    this.left = null
-    this.right = null
+module.exports = createBinarySearchTree
+
+function createBinarySearchTree (value) {
+  if (value === undefined) throw new TypeError('Initial value is required!')
+
+  let left = null
+  let right = null
+
+  return {
+    value,
+    left,
+    right,
+    insert,
+    find,
+    traverseInOrder,
+    [Symbol.iterator]: iterator
   }
 
   /**
@@ -24,7 +34,7 @@ module.exports = class BinarySearchTree {
    * Performance: O(log(n)) on average, depends on tree height
    * @param {string|number} value
    */
-  insert (value) {
+  function insert (value) {
     let parent
     let current = this
     while (current) {
@@ -32,7 +42,7 @@ module.exports = class BinarySearchTree {
       current = value < current.value ? current.left : current.right
     }
 
-    const child = new BinarySearchTree(value)
+    const child = createBinarySearchTree(value)
     if (value < parent.value) {
       parent.left = child
     } else {
@@ -49,7 +59,7 @@ module.exports = class BinarySearchTree {
    * @param {string|number} value
    * @returns {boolean}
    */
-  find (value) {
+  function find (value) {
     let current = this
     while (current) {
       if (value === current.value) return true
@@ -67,7 +77,7 @@ module.exports = class BinarySearchTree {
    * Performance: O(n)
    * @param {function} fn
    */
-  traverseInOrder (fn) {
+  function traverseInOrder (fn) {
     const visit = node => {
       if (node) {
         visit(node.left)
@@ -85,7 +95,7 @@ module.exports = class BinarySearchTree {
    *
    * Performance: O(n)
    */
-  *[Symbol.iterator] () {
+  function* iterator () {
     const stack = createStack()
     let node = this
     while (stack.length > 0 || node) {

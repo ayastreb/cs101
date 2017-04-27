@@ -1,8 +1,8 @@
 const test = require('tape')
-const Tree = require('./Tree')
+const createTree = require('./Tree')
 
 test('create root node', assert => {
-  const root = new Tree('Root')
+  const root = createTree('Root')
   assert.equals(root.label, 'Root')
   assert.end()
 })
@@ -15,7 +15,7 @@ test('tree size', assert => {
    *  |
    * (C)
    */
-  const root = new Tree('A')
+  const root = createTree('A')
   const leftTree = root.insert('B')
   leftTree.insert('C')
   const rightTree = root.insert('D')
@@ -38,7 +38,7 @@ test('tree depth', assert => {
    *  |
    * (E)         -> 4
    */
-  const root = new Tree('A')
+  const root = createTree('A')
   const nodeB = root.insert('B')
   const nodeC = nodeB.insert('C')
   const nodeD = nodeC.insert('D')
@@ -70,7 +70,7 @@ test('tree height', assert => {
    *  |
    * (E)
    */
-  const root = new Tree('A')
+  const root = createTree('A')
   const nodeB = root.insert('B')
   const nodeC = nodeB.insert('C')
   const nodeD = nodeC.insert('D')
@@ -100,7 +100,7 @@ test('traverse with breadth first search', assert => {
    *     / \
    *   (F) (G)
    */
-  const root = new Tree('A')
+  const root = createTree('A')
   root.insert('B')
   const middleTree = root.insert('C').insert('E')
   middleTree.insert('F')
@@ -124,7 +124,7 @@ test('traverse with depth first search', assert => {
    *     / \
    *   (5) (6)
    */
-  const root = new Tree(1)
+  const root = createTree(1)
   root.insert(2)
   const middleTree = root.insert(3).insert(4)
   middleTree.insert(5)
@@ -148,7 +148,7 @@ test('stop traversing if callback returns false', assert => {
    *     / \
    *   (F) (G)
    */
-  const root = new Tree('A')
+  const root = createTree('A')
   root.insert('B')
   const middleTree = root.insert('C').insert('E')
   root.insert('D')
