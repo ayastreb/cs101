@@ -88,7 +88,7 @@ module.exports = class BinarySearchTree {
   *[Symbol.iterator] () {
     const stack = createStack()
     let node = this
-    while (stack.size() > 0 || node) {
+    while (stack.length > 0 || node) {
       if (node) {
         stack.push(node)
         node = node.left

@@ -29,7 +29,7 @@ module.exports = input => {
 
   for (let token of input.split(' ')) {
     if (processors.hasOwnProperty(token)) {
-      if (stack.size() < 2) throw new TypeError('Too few values!')
+      if (stack.length < 2) throw new TypeError('Too few values!')
 
       stack.push(processors[token](stack.pop(), stack.pop()))
     } else {
@@ -37,7 +37,7 @@ module.exports = input => {
     }
   }
 
-  if (stack.size() > 1) throw new TypeError('Too many values!')
+  if (stack.length > 1) throw new TypeError('Too many values!')
 
   return stack.pop()
 

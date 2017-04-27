@@ -11,7 +11,7 @@ test('enqueue items to the queue', assert => {
   const queue = createQueue()
   queue.enqueue('foo')
   queue.enqueue('bar')
-  assert.equal(queue.size(), 2)
+  assert.equal(queue.length, 2)
   assert.equal(queue.peek(), 'foo')
   assert.end()
 })

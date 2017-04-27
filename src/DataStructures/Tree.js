@@ -61,7 +61,7 @@ module.exports = class Tree {
     const queue = createQueue()
     queue.enqueue(this)
 
-    while (queue.size() > 0) {
+    while (queue.length > 0) {
       const node = queue.dequeue()
       if (callback(node.label) === false) return
 
@@ -80,7 +80,7 @@ module.exports = class Tree {
     const stack = createStack()
     stack.push(this)
 
-    while (stack.size() > 0) {
+    while (stack.length > 0) {
       const node = stack.pop()
       if (callback(node.label) === false) return
 

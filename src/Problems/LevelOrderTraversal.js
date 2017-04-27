@@ -12,9 +12,9 @@ module.exports = root => {
   const queue = createQueue()
   queue.enqueue(root)
 
-  while (queue.size() > 0) {
+  while (queue.length > 0) {
     const level = []
-    pendingNodes = queue.size()
+    pendingNodes = queue.length
     while (pendingNodes > 0) {
       const node = queue.dequeue()
       level.push(node.value)

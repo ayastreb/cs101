@@ -15,8 +15,8 @@ const createLinkedList = require('../DataStructures/SinglyLinkedList')
 module.exports = input => {
   const list = createLinkedList()
   for (let item of input) {
-    if (item !== list.showFirst()) list.addFirst(item)
+    if (item !== list.first) list.addFirst(item)
   }
 
-  return list.size()
+  return list.length
 }

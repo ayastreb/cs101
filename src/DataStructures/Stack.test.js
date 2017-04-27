@@ -11,7 +11,7 @@ test('push items to the stack', assert => {
   const stack = createStack()
   stack.push('foo')
   stack.push('bar')
-  assert.equal(stack.size(), 2)
+  assert.equal(stack.length, 2)
   assert.equal(stack.peek(), 'bar')
   assert.end()
 })
@@ -24,7 +24,7 @@ test('pop items from the stack', assert => {
   assert.equal(stack.pop(), 'C')
   assert.equal(stack.pop(), 'B')
   assert.equal(stack.pop(), 'A')
-  assert.equal(stack.size(), 0)
+  assert.equal(stack.length, 0)
   assert.end()
 })
 

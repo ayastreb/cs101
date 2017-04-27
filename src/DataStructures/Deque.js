@@ -40,13 +40,19 @@ module.exports = (input = []) => {
   initialize(input)
   /** Public interface */
   return {
-    size,
-    first,
-    last,
     push,
     unshift,
     pop,
-    shift
+    shift,
+    get length () {
+      return list.length
+    },
+    get first () {
+      return list.first
+    },
+    get last () {
+      return list.last
+    }
   }
 
   /**
@@ -57,36 +63,6 @@ module.exports = (input = []) => {
    */
   function initialize (input) {
     input.forEach(push)
-  }
-
-  /**
-   * Get current deque size.
-   *
-   * Performance: O(1)
-   * @returns {number}
-   */
-  function size () {
-    return list.size()
-  }
-
-  /**
-   * Return value of first element without removing it.
-   *
-   * Performance: O(1)
-   * @returns {*}
-   */
-  function first () {
-    return list.showFirst()
-  }
-
-  /**
-   * Return value of last element without removing it.
-   *
-   * Performance: O(1)
-   * @returns {*}
-   */
-  function last () {
-    return list.showLast()
   }
 
   /**
@@ -116,7 +92,7 @@ module.exports = (input = []) => {
    * @returns {*}
    */
   function pop () {
-    if (list.size() === 0) throw RangeError("Can't pop empty queue.")
+    if (list.length === 0) throw RangeError("Can't pop empty queue.")
     return list.removeLast()
   }
 
@@ -127,7 +103,7 @@ module.exports = (input = []) => {
    * @returns {*}
    */
   function shift () {
-    if (list.size() === 0) throw RangeError("Can't shift empty queue.")
+    if (list.length === 0) throw RangeError("Can't shift empty queue.")
     return list.removeFirst()
   }
 }

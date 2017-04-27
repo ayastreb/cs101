@@ -28,10 +28,12 @@ module.exports = (input = []) => {
   initialize(input)
   /** Public interface */
   return {
-    size,
     peek,
     push,
-    pop
+    pop,
+    get length () {
+      return list.length
+    }
   }
 
   /**
@@ -45,23 +47,13 @@ module.exports = (input = []) => {
   }
 
   /**
-   * Get current stack size.
-   *
-   * Performance: O(1)
-   * @returns {number}
-   */
-  function size () {
-    return list.size()
-  }
-
-  /**
    * Return top element of the stack without removing it.
    *
    * Performance: O(1)
    * @returns {*}
    */
   function peek () {
-    return list.showFirst()
+    return list.first
   }
 
   /**
@@ -81,7 +73,7 @@ module.exports = (input = []) => {
    * @returns {*}
    */
   function pop () {
-    if (list.size() === 0) throw RangeError("Can't pop from empty stack.")
+    if (list.length === 0) throw RangeError("Can't pop from empty stack.")
     return list.removeFirst()
   }
 }

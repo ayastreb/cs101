@@ -43,16 +43,22 @@ module.exports = (input = []) => {
   initialize(input)
   /** Public interface */
   return {
-    size,
     find,
     addFirst,
     addLast,
     removeFirst,
     removeLast,
-    showFirst,
-    showLast,
     insertAfter,
-    [Symbol.iterator]: iterator
+    [Symbol.iterator]: iterator,
+    get length () {
+      return length
+    },
+    get first () {
+      return head ? head.data : null
+    },
+    get last () {
+      return tail ? tail.data : null
+    }
   }
 
   /**
@@ -66,16 +72,6 @@ module.exports = (input = []) => {
   }
 
   /**
-   * Get current list size.
-   *
-   * Performance: O(1)
-   * @returns {Number}
-   */
-  function size () {
-    return length
-  }
-
-  /**
    * Find item at the given position from the beginning of the list.
    * Position is a 0-based index:
    * A->B->C->D
@@ -86,7 +82,7 @@ module.exports = (input = []) => {
    * @returns {*}
    */
   function find (index) {
-    if (index >= size()) throw RangeError(`Index ${index} is out of range.`)
+    if (index >= length) throw RangeError(`Index ${index} is out of range.`)
     let current = head
     for (let i = 0; i < index; i++) current = current.next
 
@@ -149,7 +145,7 @@ module.exports = (input = []) => {
    */
   function removeLast () {
     if (head === null) throw RangeError("Can't remove from empty list.")
-    if (size() === 1) return removeFirst()
+    if (length === 1) return removeFirst()
 
     let previous
     let current = head
@@ -164,26 +160,6 @@ module.exports = (input = []) => {
   }
 
   /**
-   * Retrieve first item data.
-   *
-   * Performance: O(1)
-   * @returns {*}
-   */
-  function showFirst () {
-    return head ? head.data : null
-  }
-
-  /**
-   * Retrieve last item data.
-   *
-   * Performance: O(1)
-   * @returns {*}
-   */
-  function showLast () {
-    return tail ? tail.data : null
-  }
-
-  /**
    * Insert new item after given position.
    *
    * Performance: O(n)
@@ -192,8 +168,8 @@ module.exports = (input = []) => {
    */
   function insertAfter (index, item) {
     if (index === 0) return addFirst(item)
-    if (index === size()) return addLast(item)
-    if (index > size()) throw RangeError(`Index ${index} is out of range.`)
+    if (index === length) return addLast(item)
+    if (index > length) throw RangeError(`Index ${index} is out of range.`)
 
     let previous
     let current = head

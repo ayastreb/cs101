@@ -26,10 +26,12 @@ module.exports = (input = []) => {
   initialize(input)
   /** Public interface */
   return {
-    size,
     peek,
     enqueue,
-    dequeue
+    dequeue,
+    get length () {
+      return list.length
+    }
   }
 
   /**
@@ -43,23 +45,13 @@ module.exports = (input = []) => {
   }
 
   /**
-   * Get current queue size.
-   *
-   * Performance: O(1)
-   * @returns {number}
-   */
-  function size () {
-    return list.size()
-  }
-
-  /**
    * Return value of the front element without removing it.
    *
    * Performance: O(1)
    * @returns {*}
    */
   function peek () {
-    return list.showFirst()
+    return list.first
   }
 
   /**
@@ -79,7 +71,7 @@ module.exports = (input = []) => {
    * @returns {*}
    */
   function dequeue () {
-    if (list.size() === 0) throw RangeError("Can't dequeue empty queue.")
+    if (list.length === 0) throw RangeError("Can't dequeue empty queue.")
     return list.removeFirst()
   }
 }
