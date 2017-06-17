@@ -7,10 +7,10 @@ const range = (start, count) => {
 
 test('matrix with even side length', assert => {
   const matrix = [
-    [1,   2,  3, 4],
+    [1, 2, 3, 4],
     [12, 13, 14, 5],
     [11, 16, 15, 6],
-    [10,  9,  8, 7]
+    [10, 9, 8, 7]
   ]
   assert.deepEqual(traverse(matrix), range(1, 16))
   assert.end()
@@ -18,7 +18,7 @@ test('matrix with even side length', assert => {
 
 test('matrix with odd side length', assert => {
   const matrix = [
-    [1,   2,  3,  4, 5],
+    [1, 2, 3, 4, 5],
     [16, 17, 18, 19, 6],
     [15, 24, 25, 20, 7],
     [14, 23, 22, 21, 8],
