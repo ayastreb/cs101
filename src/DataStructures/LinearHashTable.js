@@ -9,7 +9,7 @@ module.exports = (hash = stringHash) => {
   let table = new Array(dimension)
 
   return {
-    get size() {
+    get size () {
       return size
     },
     set,
@@ -25,7 +25,7 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @param {*} value
    */
-  function set(key, value) {
+  function set (key, value) {
     const index = indexOf(key)
     if (table[index] && table[index].key === key) {
       table[index].value = value
@@ -43,7 +43,7 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {boolean}
    */
-  function has(key) {
+  function has (key) {
     const index = indexOf(key)
 
     return table[index] !== undefined
@@ -56,7 +56,7 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {*}
    */
-  function find(key) {
+  function find (key) {
     const index = indexOf(key)
 
     return table[index] && table[index].value
@@ -68,17 +68,14 @@ module.exports = (hash = stringHash) => {
    * Performance: O(1)
    * @param {string|number} key
    */
-  function remove(key) {
+  function remove (key) {
     let index = indexOf(key)
     if (table[index] === undefined) return
 
     let next = index
     while (table[next] !== undefined) {
       let naturalNext = hash(table[next].key) % dimension
-      if (
-        (next > index && (naturalNext <= index || naturalNext > next)) ||
-        (next < index && (naturalNext <= index || naturalNext > next))
-      ) {
+      if ((naturalNext <= index || naturalNext > next) && next !== index) {
         table[index] = table[next]
         index = next
       }
@@ -95,16 +92,14 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {number}
    */
-  function indexOf(key) {
+  function indexOf (key) {
     if (typeof key !== 'string' && typeof key !== 'number') {
       throw TypeError('Key must be a string or a number.')
     }
 
     let index = hash(key) % dimension
     while (table[index] !== undefined) {
-      if (table[index].key === key) {
-        return index
-      }
+      if (table[index].key === key) return index
       index = (index + 1) % dimension
     }
 
@@ -114,7 +109,7 @@ module.exports = (hash = stringHash) => {
   /**
    * Increase or decrease underlying table when load factor goes up or down.
    */
-  function resizeIfNeeded() {
+  function resizeIfNeeded () {
     if (loadFactor() >= UPPER_LOAD_LIMIT) {
       dimension = dimension * 2
     } else if (loadFactor() < LOWER_LOAD_LIMIT) {
@@ -137,7 +132,7 @@ module.exports = (hash = stringHash) => {
     table = resized
   }
 
-  function loadFactor() {
+  function loadFactor () {
     return size / dimension
   }
 }
