@@ -75,7 +75,7 @@ module.exports = (hash = stringHash) => {
     let next = index
     while (table[next] !== undefined) {
       let naturalNext = hash(table[next].key) % dimension
-      if ((naturalNext <= index || naturalNext > next) && next !== index) {
+      if (naturalNext <= index || naturalNext > next) {
         table[index] = table[next]
         index = next
       }
