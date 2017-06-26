@@ -59,7 +59,7 @@ module.exports = (hash = stringHash) => {
   function find(key) {
     const index = indexOf(key)
 
-    return table[index] === undefined ? undefined : table[index].value
+    return table[index] && table[index].value
   }
 
   /**
