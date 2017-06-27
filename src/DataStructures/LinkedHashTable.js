@@ -95,8 +95,9 @@ module.exports = (hash = stringHash) => {
    */
   function remove (key) {
     const bucket = getBucketFor(key)
-    const node = getBucketFor(key).find(key)
+    const node = bucket.find(key)
     if (!node) return false
+
     bucket.remove(node)
     size--
     resizeIfNeeded()
