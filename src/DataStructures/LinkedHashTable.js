@@ -1,13 +1,14 @@
 const stringHash = require('../StringHash')
+const createLinkedList = require('./KeyValueLinkedList')
 /**
  * Hash table is basic data structure used to implement associative array,
  * mapping keys to values. It uses a hash function to compute an index of array
  * where value can be found. If different keys hash to the same index in array,
  * that is called a collusion.
- * This implementation uses linked probing (open addressing) for collusion resolution, e.g.
- * if collision occurs and the cell is already occupied, it searches for the
- * next closest free location and inserts the key there.
- * See also LinkedHashTable.js
+ * This implementation uses linked lists for collusion resolution, e.g.
+ * instead of writing the value directly to the table, it creates a linked list
+ * and adds all values with the same key hash to the list.
+ * See also LinearHashTable.js
  *
  * Application:
  * Hash table is widely used data structure due to its performance.
@@ -33,7 +34,7 @@ module.exports = (hash = stringHash) => {
   let table = new Array(dimension)
 
   return {
-    get size () {
+    get size() {
       return size
     },
     set,
@@ -49,12 +50,13 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @param {*} value
    */
-  function set (key, value) {
-    const index = indexOf(key)
-    if (table[index] && table[index].key === key) {
-      table[index].value = value
+  function set(key, value) {
+    const bucket = getBucketFor(key)
+    const node = bucket.find(key)
+    if (node) {
+      node.value = value
     } else {
-      table[index] = { key, value }
+      bucket.insert(key, value)
       size++
       resizeIfNeeded()
     }
@@ -67,10 +69,8 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {boolean}
    */
-  function has (key) {
-    const index = indexOf(key)
-
-    return table[index] !== undefined
+  function has(key) {
+    return getBucketFor(key).find(key) !== undefined
   }
 
   /**
@@ -78,62 +78,51 @@ module.exports = (hash = stringHash) => {
    *
    * Performance: O(1)
    * @param {string|number} key
-   * @returns {*}
+   * @returns {*} value for given key or null if not found
    */
-  function get (key) {
-    const index = indexOf(key)
+  function get(key) {
+    const node = getBucketFor(key).find(key)
 
-    return table[index] && table[index].value
+    return node && node.value
   }
 
   /**
-   * Delete entry for given key.
+   * Delete value for given key from hash table.
    *
    * Performance: O(1)
    * @param {string|number} key
+   * @returns {Boolean} true if value was found, false otherwise
    */
-  function remove (key) {
-    let index = indexOf(key)
-    if (table[index] === undefined) return
-
-    let next = index
-    while (table[next] !== undefined) {
-      let naturalNext = hash(table[next].key) % dimension
-      if (naturalNext <= index || naturalNext > next) {
-        table[index] = table[next]
-        index = next
-      }
-      next = (next + 1) % dimension
-    }
-    table[index] = undefined
+  function remove(key) {
+    const bucket = getBucketFor(key)
+    const node = getBucketFor(key).find(key)
+    if (!node) return false
+    bucket.remove(node)
     size--
     resizeIfNeeded()
+    return true
   }
 
   /**
-   * Get position in hash table for given key.
+   * Get the bucket (linked list) for given key
    *
    * @param {string|number} key
-   * @returns {number}
+   * @returns {*} linked list
    */
-  function indexOf (key) {
+  function getBucketFor(key) {
     if (typeof key !== 'string' && typeof key !== 'number') {
       throw TypeError('Key must be a string or a number.')
     }
+    const index = hash(key) % dimension
+    if (!table[index]) table[index] = createLinkedList()
 
-    let index = hash(key) % dimension
-    while (table[index] !== undefined) {
-      if (table[index].key === key) return index
-      index = (index + 1) % dimension
-    }
-
-    return index
+    return table[index]
   }
 
   /**
    * Increase or decrease underlying table when load factor goes up or down.
    */
-  function resizeIfNeeded () {
+  function resizeIfNeeded() {
     if (loadFactor() >= UPPER_LOAD_LIMIT) {
       dimension = dimension * 2
     } else if (loadFactor() < LOWER_LOAD_LIMIT) {
@@ -145,18 +134,18 @@ module.exports = (hash = stringHash) => {
     const resized = new Array(dimension)
     for (let i = 0; i < table.length; i++) {
       if (table[i] !== undefined) {
-        let index = hash(table[i].key) % dimension
-        while (resized[index] !== undefined) {
-          index = (index + 1) % dimension
-        }
-        resized[index] = table[i]
+        table[i].keys().forEach(key => {
+          let index = hash(key) % dimension
+          if (!resized[index]) resized[index] = createLinkedList()
+          resized[index].insert(key, table[i].find(key).value)
+        })
       }
     }
 
     table = resized
   }
 
-  function loadFactor () {
+  function loadFactor() {
     return size / dimension
   }
 }

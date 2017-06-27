@@ -1,4 +1,4 @@
-const createHashTable = require('../DataStructures/HashTable')
+const createHashTable = require('../DataStructures/LinkedHashTable')
 /**
  * Given two arrays, find the difference between them.
  * Example:
