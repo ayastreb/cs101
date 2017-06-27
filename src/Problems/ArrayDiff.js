@@ -18,7 +18,7 @@ module.exports = (first, second) => {
 
   return first.concat(second)
     .map(item => {
-      unique.set(item, unique.get(item) === null)
+      unique.set(item, unique.get(item) === undefined)
       return item
     })
     .filter(item => unique.get(item))
