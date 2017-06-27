@@ -5,7 +5,7 @@ const createLinearHashTable = require('./LinearHashTable')
 runTestSuite('LinkedHashTable', createLinkedHashTable)
 runTestSuite('LinearHashTable', createLinearHashTable)
 
-function runTestSuite(name, createHashTable) {
+function runTestSuite (name, createHashTable) {
   test(`${name}: set values`, assert => {
     const hashTable = createHashTable()
     hashTable.set('foo', 'bar')

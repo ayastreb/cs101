@@ -7,7 +7,7 @@ module.exports = () => {
   let length = 0
 
   return {
-    get length() {
+    get length () {
       return length
     },
     insert: (key, value) => {

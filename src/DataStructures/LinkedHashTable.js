@@ -34,7 +34,7 @@ module.exports = (hash = stringHash) => {
   let table = new Array(dimension)
 
   return {
-    get size() {
+    get size () {
       return size
     },
     set,
@@ -50,7 +50,7 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @param {*} value
    */
-  function set(key, value) {
+  function set (key, value) {
     const bucket = getBucketFor(key)
     const node = bucket.find(key)
     if (node) {
@@ -69,7 +69,7 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {boolean}
    */
-  function has(key) {
+  function has (key) {
     return getBucketFor(key).find(key) !== undefined
   }
 
@@ -80,7 +80,7 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {*} value for given key or null if not found
    */
-  function get(key) {
+  function get (key) {
     const node = getBucketFor(key).find(key)
 
     return node && node.value
@@ -93,7 +93,7 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {Boolean} true if value was found, false otherwise
    */
-  function remove(key) {
+  function remove (key) {
     const bucket = getBucketFor(key)
     const node = getBucketFor(key).find(key)
     if (!node) return false
@@ -109,7 +109,7 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {*} linked list
    */
-  function getBucketFor(key) {
+  function getBucketFor (key) {
     if (typeof key !== 'string' && typeof key !== 'number') {
       throw TypeError('Key must be a string or a number.')
     }
@@ -122,7 +122,7 @@ module.exports = (hash = stringHash) => {
   /**
    * Increase or decrease underlying table when load factor goes up or down.
    */
-  function resizeIfNeeded() {
+  function resizeIfNeeded () {
     if (loadFactor() >= UPPER_LOAD_LIMIT) {
       dimension = dimension * 2
     } else if (loadFactor() < LOWER_LOAD_LIMIT) {
@@ -145,7 +145,7 @@ module.exports = (hash = stringHash) => {
     table = resized
   }
 
-  function loadFactor() {
+  function loadFactor () {
     return size / dimension
   }
 }
