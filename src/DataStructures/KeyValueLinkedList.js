@@ -31,13 +31,9 @@ module.exports = () => {
     },
     remove: node => {
       if (!node) return false
-      if (!node.prev) {
-        head = node.next
-        if (head) head.prev = undefined
-      } else {
-        node.prev.next = node.next
-        if (node.next) node.next.prev = node.prev
-      }
+      if (!node.prev) head = node.next
+      if (node.prev) node.prev.next = node.next
+      if (node.next) node.next.prev = node.prev
       length--
       return true
     },
