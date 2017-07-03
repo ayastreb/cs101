@@ -94,7 +94,7 @@ module.exports = (hash = stringHash) => {
    */
   function remove (key) {
     let index = indexOf(key)
-    if (table[index] === undefined) return
+    if (table[index] === undefined) return false
 
     let next = index
     while (table[next] !== undefined) {

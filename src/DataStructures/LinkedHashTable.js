@@ -136,7 +136,7 @@ module.exports = (hash = stringHash) => {
     for (let i = 0; i < table.length; i++) {
       if (table[i] !== undefined) {
         table[i].keys().forEach(key => {
-          let index = hash(key) % dimension
+          const index = hash(key) % dimension
           if (!resized[index]) resized[index] = createLinkedList()
           resized[index].insert(key, table[i].find(key).value)
         })
