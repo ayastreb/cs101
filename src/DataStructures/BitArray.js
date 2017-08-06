@@ -3,19 +3,17 @@ class BitArray {
    * Create new bit array of given bits length.
    * Bits are stored in words array, each word is an unsigned 32-bit integer.
    *
-   * @param {number} length in bytes
+   * @param {number} length in bits
    */
   constructor(length = 0) {
-    // size in words (number of bits / 32)
-    this.size = length >> 5
-    this.words = new Uint32Array(this.size)
+    this.words = new Uint32Array(length >> 5)
   }
 
   /**
-   * @returns {number} length in bytes (number of words * 32)
+   * @returns {number} length in bits (number of words * 32)
    */
   get length() {
-    return this.size << 5
+    return this.words.length * 32
   }
 
   /**
@@ -60,7 +58,7 @@ class BitArray {
    */
   not() {
     const result = new BitArray(this.length)
-    for (let index = 0; index < this.size; index++) {
+    for (let index = 0; index < this.words.length; index++) {
       result.words[index] = ~this.words[index]
     }
 
@@ -78,7 +76,7 @@ class BitArray {
     const shorter = this.length < other.length ? this : other
     const longer = this.length < other.length ? other : this
     const result = new BitArray(shorter.length)
-    for (let index = 0; index < result.size; index++) {
+    for (let index = 0; index < result.words.length; index++) {
       result.words[index] = shorter.words[index] & longer.words[index]
     }
 
@@ -95,7 +93,7 @@ class BitArray {
   or(other) {
     const maxLength = this.length > other.length ? this.length : other.length
     const result = new BitArray(maxLength)
-    for (let index = 0; index < result.size; index++) {
+    for (let index = 0; index < result.words.length; index++) {
       result.words[index] = this.words[index] | other.words[index]
     }
 
@@ -112,7 +110,7 @@ class BitArray {
   xor(other) {
     const maxLength = this.length > other.length ? this.length : other.length
     const result = new BitArray(maxLength)
-    for (let index = 0; index < result.size; index++) {
+    for (let index = 0; index < result.words.length; index++) {
       result.words[index] = this.words[index] ^ other.words[index]
     }
 
@@ -127,10 +125,12 @@ class BitArray {
    */
   toString(skipLeadingZero = false) {
     let string = ''
-    for (let position = this.length - 1; position >= 0; position--) {
-      const isBitSet = this.get(position)
-      if (skipLeadingZero && string.length === 0 && !isBitSet) continue
-      string += isBitSet ? '1' : '0'
+    for (let index = this.words.length - 1; index >= 0; index--) {
+      for (let position = 31; position >= 0; position--) {
+        const isBitSet = ((this.words[index] >> position) & 1) !== 0
+        if (skipLeadingZero && string.length === 0 && !isBitSet) continue
+        string += isBitSet ? '1' : '0'
+      }
     }
 
     return string
@@ -142,7 +142,27 @@ class BitArray {
     }
   }
 
-  static fromString(string) {}
+  /**
+   * Create new bit array from given binary string.
+   *
+   * @param {string} string
+   * @returns BitArray
+   */
+  static fromString(string) {
+    let start = 0
+    let end = string.length % 32
+    const parsedWords = []
+    while (end <= string.length) {
+      parsedWords.push(parseInt(string.substr(start, end), 2))
+      start = end
+      end += 32
+    }
+
+    const array = new BitArray(parsedWords.length * 32)
+    array.words.set(parsedWords.reverse())
+
+    return array
+  }
 
   /**
    * Get index of word where bit with given position should be.
@@ -154,9 +174,8 @@ class BitArray {
    */
   _getIndex(position) {
     const index = position >> 5
-    if (index >= this.size) {
-      this.size = index + 1
-      let resized = new Uint32Array(this.size)
+    if (index >= this.words.length) {
+      let resized = new Uint32Array(index + 1)
       resized.set(this.words)
       this.words = resized
     }

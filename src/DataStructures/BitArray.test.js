@@ -168,6 +168,46 @@ test('print to string', assert => {
   assert.end()
 })
 
+test('from string', assert => {
+  const array = BitArray.fromString('1111000000000000000000000000110101')
+
+  assert.equal(array.get(0), true)
+  assert.equal(array.get(2), true)
+  assert.equal(array.get(4), true)
+  assert.equal(array.get(5), true)
+  assert.equal(array.get(30), true)
+  assert.equal(array.get(31), true)
+  assert.equal(array.get(32), true)
+  assert.equal(array.get(33), true)
+  assert.equal(array.toString(true), '1111000000000000000000000000110101')
+
+  assert.end()
+})
+
+test('from string all ones', assert => {
+  // 65 bits
+  const array = BitArray.fromString(
+    '11111111111111111111111111111111111111111111111111111111111111111'
+  )
+
+  for (let position = 0; position < 65; position++) {
+    assert.equal(array.get(position), true)
+  }
+
+  assert.end()
+})
+
+test('from short string', assert => {
+  const array = BitArray.fromString('110')
+
+  assert.equal(array.get(0), false)
+  assert.equal(array.get(1), true)
+  assert.equal(array.get(2), true)
+  assert.equal(array.toString(true), '110')
+
+  assert.end()
+})
+
 test('default iterator', assert => {
   const array = new BitArray()
   array.set(0, true)
