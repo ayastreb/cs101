@@ -5,14 +5,14 @@ class BitArray {
    *
    * @param {number} length in bits
    */
-  constructor(length = 0) {
+  constructor (length = 0) {
     this.words = new Uint32Array(length >> 5)
   }
 
   /**
    * @returns {number} length in bits (number of words * 32)
    */
-  get length() {
+  get length () {
     return this.words.length * 32
   }
 
@@ -21,7 +21,7 @@ class BitArray {
    *
    * @param {number} position
    */
-  toggle(position) {
+  toggle (position) {
     const index = this._getIndex(position)
     this.words[index] ^= 1 << position
   }
@@ -32,7 +32,7 @@ class BitArray {
    * @param {number} position
    * @param {boolean} value
    */
-  set(position, value) {
+  set (position, value) {
     const index = this._getIndex(position)
     if (value) {
       this.words[index] |= 1 << position
@@ -47,7 +47,7 @@ class BitArray {
    * @param {number} position
    * @returns {boolean}
    */
-  get(position) {
+  get (position) {
     return ((this.words[position >> 5] >> position) & 1) !== 0
   }
 
@@ -56,7 +56,7 @@ class BitArray {
    *
    * @returns {BitArray}
    */
-  not() {
+  not () {
     const result = new BitArray(this.length)
     for (let index = 0; index < this.words.length; index++) {
       result.words[index] = ~this.words[index]
@@ -72,7 +72,7 @@ class BitArray {
    * @param {BitArray} other
    * @returns {BitArray}
    */
-  and(other) {
+  and (other) {
     const shorter = this.length < other.length ? this : other
     const longer = this.length < other.length ? other : this
     const result = new BitArray(shorter.length)
@@ -90,7 +90,7 @@ class BitArray {
    * @param {BitArray} other
    * @returns {BitArray}
    */
-  or(other) {
+  or (other) {
     const maxLength = this.length > other.length ? this.length : other.length
     const result = new BitArray(maxLength)
     for (let index = 0; index < result.words.length; index++) {
@@ -107,7 +107,7 @@ class BitArray {
    * @param {BitArray} other
    * @returns {BitArray}
    */
-  xor(other) {
+  xor (other) {
     const maxLength = this.length > other.length ? this.length : other.length
     const result = new BitArray(maxLength)
     for (let index = 0; index < result.words.length; index++) {
@@ -123,7 +123,7 @@ class BitArray {
    * @param {boolean} skipLeadingZero
    * @returns {string}
    */
-  toString(skipLeadingZero = false) {
+  toString (skipLeadingZero = false) {
     let string = ''
     for (let index = this.words.length - 1; index >= 0; index--) {
       for (let position = 31; position >= 0; position--) {
@@ -136,7 +136,7 @@ class BitArray {
     return string
   }
 
-  *[Symbol.iterator]() {
+  *[Symbol.iterator] () {
     for (let position = this.length - 1; position >= 0; position--) {
       yield this.get(position)
     }
@@ -148,7 +148,7 @@ class BitArray {
    * @param {string} string
    * @returns BitArray
    */
-  static fromString(string) {
+  static fromString (string) {
     let start = 0
     let end = string.length % 32
     const parsedWords = []
@@ -172,7 +172,7 @@ class BitArray {
    * @returns {number}
    * @private
    */
-  _getIndex(position) {
+  _getIndex (position) {
     const index = position >> 5
     if (index >= this.words.length) {
       let resized = new Uint32Array(index + 1)
