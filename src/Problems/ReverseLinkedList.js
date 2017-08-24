@@ -5,10 +5,9 @@
  */
 module.exports = {
   iterative: head => {
-    let next
     let prev = null
     while (head) {
-      next = head.next
+      let next = head.next
       head.next = prev
       prev = head
       head = next
@@ -19,7 +18,7 @@ module.exports = {
   recursive
 }
 
-function recursive(head, prev = null) {
+function recursive (head, prev = null) {
   if (head === null) return prev
 
   let next = head.next
