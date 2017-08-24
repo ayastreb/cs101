@@ -4,18 +4,20 @@
  * @param head
  */
 module.exports = {
-  iterative: head => {
-    let prev = null
-    while (head) {
-      let next = head.next
-      head.next = prev
-      prev = head
-      head = next
-    }
-
-    return prev
-  },
+  iterative,
   recursive
+}
+
+function iterative (head) {
+  let prev = null
+  while (head) {
+    let next = head.next
+    head.next = prev
+    prev = head
+    head = next
+  }
+
+  return prev
 }
 
 function recursive (head, prev = null) {
