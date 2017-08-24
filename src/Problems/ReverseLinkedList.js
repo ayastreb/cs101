@@ -1,21 +1,28 @@
-const createStack = require('../DataStructures/Stack')
-const createLinkedList = require('../DataStructures/SinglyLinkedList')
 /**
- * Given a linked list we need to return reversed list.
+ * Given a head of linked list we need to return reversed list.
  *
- * @param list
+ * @param head
  */
-module.exports = list => {
-  const reversed = createLinkedList()
-  const stack = createStack()
+module.exports = {
+  iterative: head => {
+    let next
+    let prev = null
+    while (head) {
+      next = head.next
+      head.next = prev
+      prev = head
+      head = next
+    }
 
-  for (let item of list) {
-    stack.push(item)
-  }
+    return prev
+  },
+  recursive
+}
 
-  while (stack.length > 0) {
-    reversed.addLast(stack.pop())
-  }
+function recursive(head, prev = null) {
+  if (head === null) return prev
 
-  return reversed
+  let next = head.next
+  head.next = prev
+  return recursive(next, head)
 }
