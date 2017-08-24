@@ -16,7 +16,7 @@ module.exports = input => {
   for (let position = 0; position < parentheses.length; position++) {
     if (parentheses[position] === OPEN) {
       queue.enqueue(position)
-    } else if(parentheses[position] === CLOSED) {
+    } else if (parentheses[position] === CLOSED) {
       if (queue.length === 0) return position
       queue.dequeue()
     }
