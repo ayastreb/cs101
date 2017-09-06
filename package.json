@@ -1,11 +1,13 @@
 {
   "name": "cs101",
   "version": "0.0.1",
-  "description": "Basic data structures and algorithms implementation for educational purposes.",
+  "description":
+    "Basic data structures and algorithms implementation for educational purposes.",
   "main": "index.js",
   "scripts": {
-    "test": "standard && tape src/**/*.test.js | faucet",
-    "cover": "istanbul cover tape -- src/**/*.test.js && codeclimate-test-reporter < coverage/lcov.info"
+    "test": "tape src/**/*.test.js | faucet",
+    "cover":
+      "istanbul cover tape -- src/**/*.test.js && codeclimate-test-reporter < coverage/lcov.info"
   },
   "author": "Anatoliy Yastreb",
   "license": "MIT",
