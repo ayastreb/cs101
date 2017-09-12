@@ -3,12 +3,12 @@
  * e.g. 'applepie' with dict {'apple', 'pie'} is broken into 'apple pie'.
  * If string can not be broken using given dict, return null.
  *
- * To solve this we split strin into two parts: left and right, incrementaly.
+ * To solve this we split string into two parts: left and right, incrementally.
  * If left part is present in dict, we recursievely iterate on right part.
  * We also memoize a set of failed attempts, so that we don't recur on the same
  * input more than once.
  *
- * @param {string} input
+ * @param {string} string
  * @param {Set} dict
  */
 module.exports = (string, dict) => {
