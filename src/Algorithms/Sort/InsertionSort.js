@@ -1,10 +1,10 @@
 module.exports = input => {
-  for (let outer = 1; outer < input.length; outer++) {
-    for (let inner = outer; inner > 0; inner--) {
-      if (input[inner - 1] < input[inner]) break
-      let tmp = input[inner]
-      input[inner] = input[inner - 1]
-      input[inner - 1] = tmp
+  for (let unsortedIndex = 1; unsortedIndex < input.length; unsortedIndex++) {
+    for (let sortedIndex = unsortedIndex; sortedIndex > 0; sortedIndex--) {
+      if (input[sortedIndex] > input[sortedIndex - 1]) break
+      let tmp = input[sortedIndex - 1]
+      input[sortedIndex - 1] = input[sortedIndex]
+      input[sortedIndex] = tmp
     }
   }
   return input
