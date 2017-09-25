@@ -15,11 +15,9 @@ function merge(left, right) {
   let pointerR = 0
   while (sorted.length < left.length + right.length) {
     if (pointerL === left.length || left[pointerL] > right[pointerR]) {
-      sorted.push(right[pointerR])
-      pointerR++
+      sorted.push(right[pointerR++])
     } else {
-      sorted.push(left[pointerL])
-      pointerL++
+      sorted.push(left[pointerL++])
     }
   }
 
