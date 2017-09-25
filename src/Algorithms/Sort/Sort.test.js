@@ -2,10 +2,12 @@ const test = require('tape')
 const bubbleSort = require('./BubbleSort')
 const selectionSort = require('./SelectionSort')
 const insertionSort = require('./InsertionSort')
+const mergeSort = require('./MergeSort')
 
 testSuite(bubbleSort)
 testSuite(selectionSort)
 testSuite(insertionSort)
+testSuite(mergeSort)
 
 function testSuite(method) {
   test(`${method.name}: sorting random input`, assert => {
