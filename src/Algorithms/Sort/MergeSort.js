@@ -11,13 +11,13 @@ function mergeSort(input) {
 
 function merge(left, right) {
   const sorted = []
-  let pointerL = 0
-  let pointerR = 0
+  let leftIndex = 0
+  let rightIndex = 0
   while (sorted.length < left.length + right.length) {
-    if (pointerL === left.length || left[pointerL] > right[pointerR]) {
-      sorted.push(right[pointerR++])
+    if (leftIndex === left.length || left[leftIndex] > right[rightIndex]) {
+      sorted.push(right[rightIndex++])
     } else {
-      sorted.push(left[pointerL++])
+      sorted.push(left[leftIndex++])
     }
   }
 
