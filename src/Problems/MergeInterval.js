@@ -14,7 +14,8 @@ module.exports = (intervals, newIntrvl) => {
   const result = []
   for (let i = 0; i < n; i++) {
     if (newIntrvl.end < intervals[i].start) {
-      result.push(newIntrvl)
+      result.push(newIntrvl, ...intervals.slice(i))
+      break
     }
     if (!isOverlapping(intervals[i], newIntrvl)) {
       result.push(intervals[i])

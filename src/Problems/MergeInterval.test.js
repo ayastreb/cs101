@@ -7,10 +7,10 @@ test('it merges into empty list', assert => {
 })
 
 test('new interval ends before first', assert => {
-  assert.deepEqual(merge([{ start: 5, end: 7 }], { start: 1, end: 4 }), [
-    { start: 1, end: 4 },
-    { start: 5, end: 7 }
-  ])
+  assert.deepEqual(
+    merge([{ start: 5, end: 7 }, { start: 8, end: 10 }], { start: 1, end: 4 }),
+    [{ start: 1, end: 4 }, { start: 5, end: 7 }, { start: 8, end: 10 }]
+  )
   assert.end()
 })
 
@@ -25,14 +25,20 @@ test('new interval start after last', assert => {
 test('new interval does not overlap', assert => {
   assert.deepEqual(
     merge(
-      [{ start: 3, end: 5 }, { start: 8, end: 10 }, { start: 14, end: 15 }],
+      [
+        { start: 3, end: 5 },
+        { start: 8, end: 10 },
+        { start: 14, end: 15 },
+        { start: 16, end: 17 }
+      ],
       { start: 11, end: 13 }
     ),
     [
       { start: 3, end: 5 },
       { start: 8, end: 10 },
       { start: 11, end: 13 },
-      { start: 14, end: 15 }
+      { start: 14, end: 15 },
+      { start: 16, end: 17 }
     ]
   )
   assert.end()
