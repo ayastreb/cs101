@@ -8,16 +8,16 @@
  * @return {array}
  */
 module.exports = nums => {
-  if (nums.length === 1) return [`${nums[0]}`]
-  const result = []
-  let left = nums[0]
+  const ranges = []
+  let prev = nums[0]
   for (let i = 0; i < nums.length; i++) {
-    if (nums[i + 1] !== nums[i] && nums[i + 1] !== nums[i] + 1) {
-      let right = nums[i]
-      result.push(left === right ? `${left}` : `${left}->${right}`)
-      left = nums[i + 1]
+    const curr = nums[i]
+    const next = nums[i + 1]
+    if (next !== curr && next !== curr + 1) {
+      ranges.push(prev === curr ? `${prev}` : `${prev}->${curr}`)
+      prev = next
     }
   }
 
-  return result
+  return ranges
 }
