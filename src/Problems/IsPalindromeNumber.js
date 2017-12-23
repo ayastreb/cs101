@@ -12,7 +12,7 @@ module.exports = input => {
   if (input < 0) return false
   const BASE = 10
 
-  let left = countDigits(input)
+  let left = Math.floor(Math.log10(input)) + 1
   let right = 1
   while (left > right) {
     if (digitAt(left) !== digitAt(right)) return false
@@ -21,22 +21,6 @@ module.exports = input => {
   }
 
   return true
-
-  /**
-   * Count how many digits there are in given number.
-   *
-   * @param {number} int
-   * @return {number}
-   */
-  function countDigits(int) {
-    let digits = 1
-    while (int >= BASE) {
-      digits++
-      int = Math.floor(int / BASE)
-    }
-
-    return digits
-  }
 
   /**
    * Get digit of input number at given position.
