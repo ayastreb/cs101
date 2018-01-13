@@ -1,34 +1,32 @@
 module.exports = quickSort
 
-function quickSort(input, left = 0, right = input.length - 1) {
-  if (input.length > 1) {
-    const pivot = partition(input, left, right)
-    if (left < pivot - 1) quickSort(input, left, pivot - 1)
-    if (pivot < right) quickSort(input, pivot, right)
+function quickSort(input, lo = 0, hi = input.length - 1) {
+  if (hi - lo > 0) {
+    const pivot = partition(input, lo, hi)
+    quickSort(input, lo, pivot - 1)
+    quickSort(input, pivot + 1, hi)
   }
 
   return input
 }
 
-function partition(array, left, right) {
-  const pivot = array[Math.floor((left + right) / 2)]
-  while (left <= right) {
-    while (array[left] < pivot) left++
-    while (array[right] > pivot) right--
-
-    if (left <= right) {
-      swap(array, left, right)
-      left++
-      right--
+function partition(input, lo, hi) {
+  const pivot = hi
+  let firstHigh = lo
+  for (let i = lo; i < hi; i++) {
+    if (input[i] < input[pivot]) {
+      swap(input, i, firstHigh)
+      firstHigh++
     }
   }
+  swap(input, pivot, firstHigh)
 
-  return left
+  return firstHigh
 }
 
-function swap(array, left, right) {
+function swap(input, left, right) {
   if (left === right) return
-  let tmp = array[left]
-  array[left] = array[right]
-  array[right] = tmp
+  let tmp = input[left]
+  input[left] = input[right]
+  input[right] = tmp
 }
