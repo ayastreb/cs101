@@ -36,6 +36,18 @@ class MinHeap {
   }
 
   /**
+   * Replace min item with given item in single pass.
+   * Min item is replaced with given item, which is then sieved down to its correct position.
+   *
+   * Performance: O(log(n))
+   * @param {*} item
+   */
+  replace(item) {
+    this.data[0] = item
+    sieveDown(this.data)
+  }
+
+  /**
    * Extract min item from the heap.
    * Min item (first in heap) is replaced with the last item, which is than sieved
    * down to its correct position.

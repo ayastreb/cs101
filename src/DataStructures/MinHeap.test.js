@@ -39,6 +39,23 @@ test('length is updated when items removed', assert => {
   assert.end()
 })
 
+test('min item is replaced with given item', assert => {
+  const heap = new MinHeap()
+
+  heap.insert(1)
+  heap.insert(2)
+  heap.insert(3)
+  assert.equal(heap.findMin(), 1)
+  assert.equal(heap.length, 3)
+  heap.replace(4)
+  assert.equal(heap.findMin(), 2)
+  assert.equal(heap.length, 3)
+  assert.equal(heap.extractMin(), 2)
+  assert.equal(heap.extractMin(), 3)
+  assert.equal(heap.extractMin(), 4)
+  assert.end()
+})
+
 test('find returns min item from heap', assert => {
   const heap = new MinHeap()
 
