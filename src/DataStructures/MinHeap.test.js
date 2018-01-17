@@ -100,20 +100,35 @@ test('extract returns min item from heap', assert => {
   assert.end()
 })
 
-test('sort random data with heap', assert => {
+test('heap can be iterated', assert => {
   const heap = new MinHeap()
+  heap.insert(5)
+  heap.insert(0)
+  heap.insert(3)
+  heap.insert(2)
+  heap.insert(4)
+  heap.insert(1)
+  assert.deepEqual([...heap], [0, 1, 2, 3, 4, 5])
+  assert.end()
+})
 
-  const data = []
+test('heap is created from given array', assert => {
+  const input = [5, 6, 3, 1, 2, 0, 4]
+  const heap = new MinHeap(input)
+
+  assert.deepEqual([...heap], [0, 1, 2, 3, 4, 5, 6])
+  assert.deepEqual(input, [5, 6, 3, 1, 2, 0, 4]) // input data should not be modified
+  assert.end()
+})
+
+test('sort random data with heap', assert => {
+  const input = []
   for (let i = 0; i < 1e5; i++) {
     const item = Math.floor(Math.random() * 1e4)
-    data.push(item)
-    heap.insert(item)
+    input.push(item)
   }
 
-  const heapSorted = []
-  while (heap.length) heapSorted.push(heap.extractMin())
-
-  data.sort((a, b) => a - b)
-  assert.deepEqual(heapSorted, data)
+  const heap = new MinHeap(input)
+  assert.deepEqual([...heap], input.sort((a, b) => a - b))
   assert.end()
 })

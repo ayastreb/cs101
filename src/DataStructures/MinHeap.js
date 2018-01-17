@@ -1,6 +1,8 @@
 class MinHeap {
-  constructor() {
-    this.data = []
+  constructor(data = []) {
+    this.data = [...data]
+    let start = Math.floor(data.length / 2 - 1)
+    while (start >= 0) siftDown(this.data, start--)
   }
 
   /**
@@ -32,7 +34,7 @@ class MinHeap {
    */
   insert(item) {
     this.data.push(item)
-    sieveUp(this.data)
+    siftUp(this.data)
   }
 
   /**
@@ -44,7 +46,7 @@ class MinHeap {
    */
   replace(item) {
     this.data[0] = item
-    sieveDown(this.data)
+    siftDown(this.data)
   }
 
   /**
@@ -59,24 +61,31 @@ class MinHeap {
     const minItem = this.findMin()
     if (this.length > 1) {
       this.data[0] = this.data.pop()
-      sieveDown(this.data)
+      siftDown(this.data)
     } else {
       this.data = []
     }
 
     return minItem
   }
+
+  /**
+   * Iterate over heap extracting min item in each step.
+   */
+  *[Symbol.iterator]() {
+    while (this.length) yield this.extractMin()
+  }
 }
 
-function sieveUp(data, index = data.length - 1) {
+function siftUp(data, index = data.length - 1) {
   const parent = (index - (index % 2 === 0 ? 2 : 1)) / 2
   if (parent < 0 || data[parent] < data[index]) return
 
   swap(data, index, parent)
-  sieveUp(data, parent)
+  siftUp(data, parent)
 }
 
-function sieveDown(data, index = 0) {
+function siftDown(data, index = 0) {
   const left = index * 2 + 1
   const right = index * 2 + 2
 
@@ -86,7 +95,7 @@ function sieveDown(data, index = 0) {
   ) {
     const smallestChild = data[left] > data[right] ? right : left
     swap(data, index, smallestChild)
-    sieveDown(data, smallestChild)
+    siftDown(data, smallestChild)
   }
 }
 
