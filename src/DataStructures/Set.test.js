@@ -1,15 +1,15 @@
 const test = require('tape')
-const createSet = require('./Set')
+const ExtendedSet = require('./Set')
 
 test('create empty set', assert => {
-  const set = createSet()
+  const set = new ExtendedSet()
   assert.equal(set.size, 0)
   assert.deepEqual(set.values(), [])
   assert.end()
 })
 
 test('create set from input array', assert => {
-  const set = createSet(['foo', 'bar', 'foo', 'baz'])
+  const set = new ExtendedSet(['foo', 'bar', 'foo', 'baz'])
 
   assert.equal(set.size, 3)
   assert.equal(set.has('foo'), true)
@@ -19,7 +19,7 @@ test('create set from input array', assert => {
 })
 
 test('add item to set', assert => {
-  const set = createSet()
+  const set = new ExtendedSet()
   set.add('foo')
   assert.equal(set.size, 1)
   assert.equal(set.has('foo'), true)
@@ -28,7 +28,7 @@ test('add item to set', assert => {
 })
 
 test('add only unique item', assert => {
-  const set = createSet()
+  const set = new ExtendedSet()
   set.add('foo')
   set.add('bar')
   set.add('foo')
@@ -40,7 +40,7 @@ test('add only unique item', assert => {
 })
 
 test('remove item', assert => {
-  const set = createSet()
+  const set = new ExtendedSet()
   set.add('foo')
   set.add('bar')
   assert.equal(set.size, 2)
@@ -54,7 +54,7 @@ test('remove item', assert => {
 })
 
 test('clear set', assert => {
-  const set = createSet()
+  const set = new ExtendedSet()
   set.add('foo')
   set.add('bar')
   assert.equal(set.size, 2)
@@ -68,7 +68,7 @@ test('clear set', assert => {
 })
 
 test('iterate over set', assert => {
-  const set = createSet()
+  const set = new ExtendedSet()
   set.add('foo')
   set.add('bar')
   set.add('baz')
@@ -78,9 +78,9 @@ test('iterate over set', assert => {
 })
 
 test('includes operator', assert => {
-  const setA = createSet(['A', 'B', 'C'])
-  const setB = createSet(['C', 'A'])
-  const setC = createSet(['A', 'D'])
+  const setA = new ExtendedSet(['A', 'B', 'C'])
+  const setB = new ExtendedSet(['C', 'A'])
+  const setC = new ExtendedSet(['A', 'D'])
 
   assert.equal(setA.includes(setB), true)
   assert.equal(setA.includes(setC), false)
@@ -88,9 +88,9 @@ test('includes operator', assert => {
 })
 
 test('subset operator', assert => {
-  const setA = createSet(['A', 'B', 'C'])
-  const setB = createSet(['C', 'A'])
-  const setC = createSet(['A', 'D'])
+  const setA = new ExtendedSet(['A', 'B', 'C'])
+  const setB = new ExtendedSet(['C', 'A'])
+  const setC = new ExtendedSet(['A', 'D'])
 
   assert.equal(setB.isSubsetOf(setA), true)
   assert.equal(setC.isSubsetOf(setA), false)
@@ -98,24 +98,24 @@ test('subset operator', assert => {
 })
 
 test('union two sets', assert => {
-  const setA = createSet(['A', 'B', 'C'])
-  const setB = createSet(['B', 'C', 'D'])
+  const setA = new ExtendedSet(['A', 'B', 'C'])
+  const setB = new ExtendedSet(['B', 'C', 'D'])
 
   assert.deepEqual(setA.union(setB).values(), ['A', 'B', 'C', 'D'])
   assert.end()
 })
 
 test('intersection of two sets', assert => {
-  const setA = createSet(['A', 'B', 'C'])
-  const setB = createSet(['B', 'C', 'D', 'E'])
+  const setA = new ExtendedSet(['A', 'B', 'C'])
+  const setB = new ExtendedSet(['B', 'C', 'D', 'E'])
 
   assert.deepEqual(setA.intersection(setB).values(), ['B', 'C'])
   assert.end()
 })
 
 test('difference of two sets', assert => {
-  const setA = createSet(['A', 'B', 'C'])
-  const setB = createSet(['B', 'C', 'D', 'E'])
+  const setA = new ExtendedSet(['A', 'B', 'C'])
+  const setB = new ExtendedSet(['B', 'C', 'D', 'E'])
 
   assert.deepEqual(setA.difference(setB).values(), ['A'])
   assert.deepEqual(setB.difference(setA).values(), ['D', 'E'])
@@ -123,8 +123,8 @@ test('difference of two sets', assert => {
 })
 
 test('symmetric difference', assert => {
-  const setA = createSet(['A', 'B', 'C'])
-  const setB = createSet(['B', 'C', 'D', 'E'])
+  const setA = new ExtendedSet(['A', 'B', 'C'])
+  const setB = new ExtendedSet(['B', 'C', 'D', 'E'])
 
   assert.deepEqual(setA.symmetricDifference(setB).values(), ['A', 'D', 'E'])
   assert.deepEqual(setB.symmetricDifference(setA).values(), ['D', 'E', 'A'])

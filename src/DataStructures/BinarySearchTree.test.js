@@ -20,7 +20,7 @@ test('find in tree with strings', assert => {
 })
 
 test('find in tree with duplicates', assert => {
-  const input = [ 10, 27, 3, 1, 3, 3, -0.5 ]
+  const input = [10, 27, 3, 1, 3, 3, -0.5]
   const tree = createBinarySearchTree(input.shift())
   input.forEach(value => tree.insert(value))
 
@@ -31,21 +31,36 @@ test('find in tree with duplicates', assert => {
 })
 
 test('traverse tree in order', assert => {
-  const input = [ 2, 18, 4, -5, 3.33, 2, 25, 1, -11 ]
+  const input = [2, 18, 4, -5, 3.33, 2, 25, 1, -11]
   const tree = createBinarySearchTree(input.shift())
   input.forEach(value => tree.insert(value))
   const traversed = []
   tree.traverseInOrder(item => traversed.push(item))
 
-  assert.deepEquals(traversed, [ -11, -5, 1, 2, 2, 3.33, 4, 18, 25 ])
+  assert.deepEquals(traversed, [-11, -5, 1, 2, 2, 3.33, 4, 18, 25])
   assert.end()
 })
 
 test('traverse tree using iterator', assert => {
-  const input = [ 2, 18, 4, -5, 3.33, 2, 25, 1, -11 ]
+  const input = [2, 18, 4, -5, 3.33, 2, 25, 1, -11]
   const tree = createBinarySearchTree(input.shift())
   input.forEach(value => tree.insert(value))
 
-  assert.deepEquals([ ...tree ], [ -11, -5, 1, 2, 2, 3.33, 4, 18, 25 ])
+  assert.deepEquals([...tree], [-11, -5, 1, 2, 2, 3.33, 4, 18, 25])
+  assert.end()
+})
+
+test('serialize tree', assert => {
+  const tree = createBinarySearchTree(5)
+  tree.insert(2)
+  tree.insert(3)
+  tree.insert(6)
+  tree.insert(7)
+
+  assert.equal(tree.serialize(), '5,2,ø,3,ø,ø,6,ø,7,ø,ø')
+  assert.end()
+})
+
+test('deserialize tree from string', assert => {
   assert.end()
 })

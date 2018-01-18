@@ -1,4 +1,4 @@
-const createStack = require('./Stack')
+const Stack = require('./Stack')
 /**
  * Binary search tree (BST) is a sorted binary tree.
  * Each node can have only two child nodes, where value in left child node is
@@ -12,7 +12,7 @@ const createStack = require('./Stack')
  */
 module.exports = createBinarySearchTree
 
-function createBinarySearchTree (value) {
+function createBinarySearchTree(value) {
   if (value === undefined) throw new TypeError('Initial value is required!')
 
   let left = null
@@ -25,6 +25,7 @@ function createBinarySearchTree (value) {
     insert,
     find,
     traverseInOrder,
+    serialize,
     [Symbol.iterator]: iterator
   }
 
@@ -34,7 +35,7 @@ function createBinarySearchTree (value) {
    * Performance: O(log(n)) on average, depends on tree height
    * @param {string|number} value
    */
-  function insert (value) {
+  function insert(value) {
     let parent
     let current = this
     while (current) {
@@ -59,7 +60,7 @@ function createBinarySearchTree (value) {
    * @param {string|number} value
    * @returns {boolean}
    */
-  function find (value) {
+  function find(value) {
     let current = this
     while (current) {
       if (value === current.value) return true
@@ -77,7 +78,7 @@ function createBinarySearchTree (value) {
    * Performance: O(n)
    * @param {function} fn
    */
-  function traverseInOrder (fn) {
+  function traverseInOrder(fn) {
     const visit = node => {
       if (node) {
         visit(node.left)
@@ -89,14 +90,31 @@ function createBinarySearchTree (value) {
     visit(this)
   }
 
+  function serialize() {
+    const buffer = []
+    const traverse = node => {
+      if (node === null) {
+        buffer.push('ø')
+      } else {
+        buffer.push(node.value)
+        traverse(node.left)
+        traverse(node.right)
+      }
+    }
+
+    traverse(this)
+
+    return buffer.join(',')
+  }
+
   /**
    * Traverse the tree using in order depth first search.
    * Implemented without recursion.
    *
    * Performance: O(n)
    */
-  function* iterator () {
-    const stack = createStack()
+  function* iterator() {
+    const stack = new Stack()
     let node = this
     while (stack.length > 0 || node) {
       if (node) {

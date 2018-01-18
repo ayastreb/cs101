@@ -1,37 +1,8 @@
-function createSet (input = []) {
-  let table = {}
-  let size = 0
-
-  input.forEach(add)
-  /** Public interface */
-  return {
-    get size () {
-      return size
-    },
-    add,
-    has,
-    remove,
-    clear,
-    values,
-    includes,
-    isSubsetOf,
-    union,
-    intersection,
-    difference,
-    symmetricDifference,
-    [Symbol.iterator]: iterator
-  }
-
-  /**
-   * Add item to set.
-   *
-   * Performance: O(1)
-   * @param {*} item
-   */
-  function add (item) {
-    if (has(item)) return
-    table[item] = true
-    size++
+class ExtendedSet {
+  constructor(input = []) {
+    this.table = {}
+    this.size = 0
+    for (const item of input) this.add(item)
   }
 
   /**
@@ -41,8 +12,20 @@ function createSet (input = []) {
    * @param {*} item
    * @returns {boolean}
    */
-  function has (item) {
-    return table[item] === true
+  has(item) {
+    return this.table[item] === true
+  }
+
+  /**
+   * Add item to set.
+   *
+   * Performance: O(1)
+   * @param {*} item
+   */
+  add(item) {
+    if (this.has(item)) return
+    this.table[item] = true
+    this.size++
   }
 
   /**
@@ -51,10 +34,10 @@ function createSet (input = []) {
    * Performance: O(1)
    * @param {*} item
    */
-  function remove (item) {
-    if (has(item)) {
-      delete table[item]
-      size--
+  remove(item) {
+    if (this.has(item)) {
+      delete this.table[item]
+      this.size--
     }
   }
 
@@ -63,9 +46,9 @@ function createSet (input = []) {
    *
    * Performance: O(1)
    */
-  function clear () {
-    table = {}
-    size = 0
+  clear() {
+    this.table = {}
+    this.size = 0
   }
 
   /**
@@ -74,21 +57,20 @@ function createSet (input = []) {
    * Performance: O(n)
    * @returns {Array}
    */
-  function values () {
-    return Object.keys(table)
+  values() {
+    return Object.keys(this.table)
   }
 
   /**
    * Check if set includes given set.
    *
    * Performance: O(n)
-   * @param other
+   * @param {ExtendedSet} other
    * @returns {boolean}
    */
-  function includes (other) {
-    for (let key of other) {
-      if (!has(key)) return false
-    }
+  includes(other) {
+    for (const key of other) if (!this.has(key)) return false
+
     return true
   }
 
@@ -96,13 +78,12 @@ function createSet (input = []) {
    * Check if set is a subset of given set.
    *
    * Performance: O(n)
-   * @param other
+   * @param {ExtendedSet} other
    * @returns {boolean}
    */
-  function isSubsetOf (other) {
-    for (let key of iterator()) {
-      if (!other.has(key)) return false
-    }
+  isSubsetOf(other) {
+    for (const key of this) if (!other.has(key)) return false
+
     return true
   }
 
@@ -110,14 +91,12 @@ function createSet (input = []) {
    * Create new set with union of current and given sets.
    *
    * Performance: O(n)
-   * @param other
-   * @returns
+   * @param {ExtendedSet} other
+   * @returns {ExtendedSet}
    */
-  function union (other) {
-    const setUnion = createSet(values())
-    for (let key of other) {
-      setUnion.add(key)
-    }
+  union(other) {
+    const setUnion = new ExtendedSet(this.values())
+    for (let key of other) setUnion.add(key)
 
     return setUnion
   }
@@ -126,12 +105,12 @@ function createSet (input = []) {
    * Create new set with intersection of current and given sets.
    *
    * Performance: O(n)
-   * @param other
-   * @returns
+   * @param {ExtendedSet} other
+   * @returns {ExtendedSet}
    */
-  function intersection (other) {
-    const setIntersection = createSet()
-    for (let key of iterator()) {
+  intersection(other) {
+    const setIntersection = new ExtendedSet()
+    for (let key of this) {
       if (other.has(key)) setIntersection.add(key)
     }
 
@@ -142,12 +121,12 @@ function createSet (input = []) {
    * Create new set with difference between current and given set.
    *
    * Performance: O(n)
-   * @param other
-   * @returns
+   * @param {ExtendedSet} other
+   * @returns {ExtendedSet}
    */
-  function difference (other) {
-    const setDifference = createSet()
-    for (let key of iterator()) {
+  difference(other) {
+    const setDifference = new ExtendedSet()
+    for (let key of this) {
       if (!other.has(key)) setDifference.add(key)
     }
 
@@ -158,21 +137,21 @@ function createSet (input = []) {
    * Create new set with symmetric difference between current and given sets.
    *
    * Performance: O(n)
-   * @param other
-   * @returns {*}
+   * @param {ExtendedSet} other
+   * @returns {ExtendedSet}
    */
-  function symmetricDifference (other) {
-    return union(other).difference(intersection(other))
+  symmetricDifference(other) {
+    return this.union(other).difference(this.intersection(other))
   }
 
   /**
    * Iterate over set.
    */
-  function* iterator () {
-    for (let key in table) {
-      if (table.hasOwnProperty(key)) yield key
+  *[Symbol.iterator]() {
+    for (const key in this.table) {
+      if (this.table.hasOwnProperty(key)) yield key
     }
   }
 }
 
-module.exports = createSet
+module.exports = ExtendedSet
