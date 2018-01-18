@@ -23,8 +23,8 @@
  *
  * Usage:
  *
- * const createSinglyLinkedList = require('./SinglyLinkedList')
- * const list = createSinglyLinkedList([ 'A', 'B', 'C' ]) // list = A->B->C
+ * const SinglyLinkedList = require('./SinglyLinkedList')
+ * const list = new SinglyLinkedList([ 'A', 'B', 'C' ]) // list = A->B->C
  * list.removeFirst() // => 'A', list = B->C
  * list.removeFirst() // => 'B', list = C
  * list.addLast('D')  // => list = C->D
@@ -32,43 +32,29 @@
  * list.removeFirst() // => 'C', list = D
  * list.removeLast()  // => 'D', list = null
  * list.removeLast()  // => throws RangeError when trying to remove from empty list
- *
- * @param {Array} input initial list data
  */
-module.exports = (input = []) => {
-  let length = 0
-  let head = null
-  let tail = null
 
-  initialize(input)
-  /** Public interface */
-  return {
-    find,
-    addFirst,
-    addLast,
-    removeFirst,
-    removeLast,
-    insertAfter,
-    [Symbol.iterator]: iterator,
-    get length () {
-      return length
-    },
-    get first () {
-      return head ? head.data : null
-    },
-    get last () {
-      return tail ? tail.data : null
-    }
-  }
-
+class SinglyLinkedList {
   /**
    * Push all items of given array into the list.
    *
    * Performance: O(n)
    * @param {Array} input initial list data
    */
-  function initialize (input) {
-    input.forEach(addLast)
+  constructor(input = []) {
+    this.length = 0
+    this.head = null
+    this.tail = null
+
+    for (const item of input) this.addLast(item)
+  }
+
+  get first() {
+    return this.head ? this.head.data : null
+  }
+
+  get last() {
+    return this.tail ? this.tail.data : null
   }
 
   /**
@@ -81,9 +67,12 @@ module.exports = (input = []) => {
    * @param {Number} index position of queried item
    * @returns {*}
    */
-  function find (index) {
-    if (index >= length) throw RangeError(`Index ${index} is out of range.`)
-    let current = head
+  find(index) {
+    if (index >= this.length) {
+      throw RangeError(`Index ${index} is out of range.`)
+    }
+
+    let current = this.head
     for (let i = 0; i < index; i++) current = current.next
 
     return current.data
@@ -95,13 +84,10 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @param {*} item
    */
-  function addFirst (item) {
-    head = {
-      data: item,
-      next: head
-    }
-    if (tail === null) tail = head
-    length++
+  addFirst(item) {
+    this.head = new Node(item, this.head)
+    if (this.tail === null) this.tail = this.head
+    this.length++
   }
 
   /**
@@ -110,15 +96,12 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @param {*} item
    */
-  function addLast (item) {
-    if (tail === null) return addFirst(item)
-    const node = {
-      data: item,
-      next: null
-    }
-    tail.next = node
-    tail = node
-    length++
+  addLast(item) {
+    if (this.tail === null) return this.addFirst(item)
+    const node = new Node(item)
+    this.tail.next = node
+    this.tail = node
+    this.length++
   }
 
   /**
@@ -127,12 +110,12 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function removeFirst () {
-    if (head === null) throw RangeError("Can't remove from empty list.")
-    const item = head.data
-    head = head.next
-    if (head === null) tail = null
-    length--
+  removeFirst() {
+    if (this.head === null) throw RangeError("Can't remove from empty list.")
+    const item = this.head.data
+    this.head = this.head.next
+    if (this.head === null) this.tail = null
+    this.length--
 
     return item
   }
@@ -143,18 +126,18 @@ module.exports = (input = []) => {
    * Performance: O(n)
    * @returns {*}
    */
-  function removeLast () {
-    if (head === null) throw RangeError("Can't remove from empty list.")
-    if (length === 1) return removeFirst()
+  removeLast() {
+    if (this.head === null) throw RangeError("Can't remove from empty list.")
+    if (this.length === 1) return this.removeFirst()
 
     let previous
-    let current = head
+    let current = this.head
     while (current.next !== null) {
       previous = current
       current = current.next
     }
     previous.next = null
-    length--
+    this.length--
 
     return current.data
   }
@@ -166,32 +149,44 @@ module.exports = (input = []) => {
    * @param {Number} index
    * @param {*} item
    */
-  function insertAfter (index, item) {
-    if (index === 0) return addFirst(item)
-    if (index === length) return addLast(item)
-    if (index > length) throw RangeError(`Index ${index} is out of range.`)
+  insertAfter(index, item) {
+    if (index === 0) return this.addFirst(item)
+    if (index === this.length) return this.addLast(item)
+    if (index > this.length) throw RangeError(`Index ${index} is out of range.`)
 
     let previous
-    let current = head
+    let current = this.head
     for (let i = 0; i <= index; i++) {
       previous = current
       current = current.next
     }
 
-    previous.next = {
-      data: item,
-      next: current
-    }
+    previous.next = new Node(item, current)
   }
 
   /**
    * Iterate over current list.
    */
-  function* iterator () {
-    let current = head
+  *[Symbol.iterator]() {
+    let current = this.head
     while (current !== null) {
       yield current.data
       current = current.next
     }
   }
 }
+
+class Node {
+  /**
+   * Node container.
+   *
+   * @param {*} data
+   * @param {Node} next
+   */
+  constructor(data, next = null) {
+    this.data = data
+    this.next = next
+  }
+}
+
+module.exports = SinglyLinkedList

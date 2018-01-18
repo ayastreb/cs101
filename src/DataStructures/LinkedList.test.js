@@ -1,16 +1,16 @@
 const test = require('tape')
-const createSinglyLinkedList = require('./SinglyLinkedList')
-const createDoublyLinkedList = require('./DoublyLinkedList')
+const SinglyLinkedList = require('./SinglyLinkedList')
+const DoublyLinkedList = require('./DoublyLinkedList')
 /**
  * Singly and doubly linked lists have the same interface and functionality, but different implementation.
  * That's why we want to run the same test suite on both implementations.
  */
-runTestSuite('Singly Linked', createSinglyLinkedList)
-runTestSuite('Doubly Linked', createDoublyLinkedList)
+runTestSuite('Singly Linked', SinglyLinkedList)
+runTestSuite('Doubly Linked', DoublyLinkedList)
 
-function runTestSuite (name, createList) {
+function runTestSuite(name, LinkedList) {
   test(`${name}: create empty list`, assert => {
-    const list = createList()
+    const list = new LinkedList()
     assert.equal(list.length, 0)
     assert.equal(list.first, null)
     assert.equal(list.last, null)
@@ -18,7 +18,7 @@ function runTestSuite (name, createList) {
   })
 
   test(`${name}: add items to the beginning of the list`, assert => {
-    const list = createList()
+    const list = new LinkedList()
     list.addFirst('foo')
     list.addFirst('bar')
     assert.equal(list.length, 2)
@@ -28,7 +28,7 @@ function runTestSuite (name, createList) {
   })
 
   test(`${name}: remove items from the beginning of the list`, assert => {
-    const list = createList()
+    const list = new LinkedList()
     list.addFirst('foo')
     list.addFirst('bar')
     assert.equal(list.removeFirst(), 'bar')
@@ -40,7 +40,7 @@ function runTestSuite (name, createList) {
   })
 
   test(`${name}: add items to the end of the list`, assert => {
-    const list = createList()
+    const list = new LinkedList()
     list.addLast('baz')
     list.addLast('bar')
     list.addLast('foo')
@@ -52,7 +52,7 @@ function runTestSuite (name, createList) {
   })
 
   test(`${name}: remove items from the end of the list`, assert => {
-    const list = createList([ 'foo', 'baz', 'bar' ])
+    const list = new LinkedList(['foo', 'baz', 'bar'])
     assert.equal(list.removeLast(), 'bar')
     assert.equal(list.removeLast(), 'baz')
     assert.equal(list.removeLast(), 'foo')
@@ -62,7 +62,7 @@ function runTestSuite (name, createList) {
   })
 
   test(`${name}: create list from array`, assert => {
-    const list = createList([ 'foo', 'bar', 'baz' ])
+    const list = new LinkedList(['foo', 'bar', 'baz'])
     assert.equal(list.length, 3)
     assert.equal(list.removeFirst(), 'foo')
     assert.equal(list.removeFirst(), 'bar')
@@ -71,8 +71,8 @@ function runTestSuite (name, createList) {
   })
 
   test(`${name}: create multiple lists`, assert => {
-    const listA = createList([ 'foo', 'bar' ])
-    const listB = createList([ 'baz' ])
+    const listA = new LinkedList(['foo', 'bar'])
+    const listB = new LinkedList(['baz'])
 
     assert.equal(listA.length, 2)
     assert.equal(listB.length, 1)
@@ -82,33 +82,33 @@ function runTestSuite (name, createList) {
   })
 
   test(`${name}: insert item after given position`, assert => {
-    const list = createList([ 'foo', 'bar', 'baz' ])
-    list.insertAfter(1, 'bad')// after 'bar'
-    assert.deepEqual([ ...list ], [ 'foo', 'bar', 'bad', 'baz' ])
-    list.insertAfter(3, 'bac')// after 'baz'
-    assert.deepEqual([ ...list ], [ 'foo', 'bar', 'bad', 'baz', 'bac' ])
+    const list = new LinkedList(['foo', 'bar', 'baz'])
+    list.insertAfter(1, 'bad') // after 'bar'
+    assert.deepEqual([...list], ['foo', 'bar', 'bad', 'baz'])
+    list.insertAfter(3, 'bac') // after 'baz'
+    assert.deepEqual([...list], ['foo', 'bar', 'bad', 'baz', 'bac'])
     assert.throws(() => list.insertAfter(5, 'too much'), RangeError)
     assert.end()
   })
 
   test(`${name}: insert item after given position into empty list`, assert => {
-    const list = createList()
+    const list = new LinkedList()
     list.insertAfter(0, 'foo')
     assert.equal(list.length, 1)
     list.insertAfter(1, 'bar')
-    assert.deepEqual([ ...list ], [ 'foo', 'bar' ])
+    assert.deepEqual([...list], ['foo', 'bar'])
     assert.end()
   })
 
   test(`${name}: throws error when removing from empty list`, assert => {
-    const list = createList()
+    const list = new LinkedList()
     assert.throws(() => list.removeFirst(), RangeError)
     assert.throws(() => list.removeLast(), RangeError)
     assert.end()
   })
 
   test(`${name}: find item by position index`, assert => {
-    const list = createList([ 'foo', 'bar', 'baz' ])
+    const list = new LinkedList(['foo', 'bar', 'baz'])
     assert.equal(list.find(0), 'foo')
     assert.equal(list.find(1), 'bar')
     assert.equal(list.find(2), 'baz')
@@ -121,31 +121,31 @@ function runTestSuite (name, createList) {
   })
 
   test(`${name}: throws error when trying to find item out of range`, assert => {
-    const list = createList([ 'foo' ])
+    const list = new LinkedList(['foo'])
     assert.throws(() => list.find(1), RangeError)
     assert.end()
   })
 
   test(`${name}: iterate over list using spread`, assert => {
-    const list = createList([ 'foo', 'bar', 'baz' ])
-    assert.deepEqual([ ...list ], [ 'foo', 'bar', 'baz' ])
+    const list = new LinkedList(['foo', 'bar', 'baz'])
+    assert.deepEqual([...list], ['foo', 'bar', 'baz'])
     assert.end()
   })
 
   test(`${name}: iterate over list using for loop`, assert => {
-    const list = createList([ 'foo', 'bar', 'baz' ])
+    const list = new LinkedList(['foo', 'bar', 'baz'])
     let output = []
     for (let item of list) {
       output.push(item)
     }
     assert.equal(output.length, 3)
-    assert.deepEqual(output, [ 'foo', 'bar', 'baz' ])
+    assert.deepEqual(output, ['foo', 'bar', 'baz'])
     assert.end()
   })
 
   test(`${name}: iterate over empty list`, assert => {
-    const emptyList = createList()
-    assert.deepEqual([ ...emptyList ], [])
+    const emptyList = new LinkedList()
+    assert.deepEqual([...emptyList], [])
 
     assert.end()
   })

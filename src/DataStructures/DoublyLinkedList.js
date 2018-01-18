@@ -19,8 +19,8 @@
  *
  * Usage:
  *
- * const createDoublyLinkedList = require('./DoublyLinkedList')
- * const list = createDoublyLinkedList([ 'A', 'B', 'C' ]) // list = A<->B<->C
+ * const DoublyLinkedList = require('./DoublyLinkedList')
+ * const list = new DoublyLinkedList([ 'A', 'B', 'C' ]) // list = A<->B<->C
  * list.removeFirst() // => 'A', list = B<->C
  * list.removeFirst() // => 'B', list = C
  * list.addLast('D')  // => list = C<->D
@@ -28,64 +28,52 @@
  * list.removeFirst() // => 'C', list = D
  * list.removeLast()  // => 'D', list = null
  * list.removeLast()  // => throws RangeError when trying to remove from empty list
- *
- * @param {Array} input initial list data
  */
-module.exports = (input = []) => {
-  let length = 0
-  let head = null
-  let tail = null
 
-  initialize(input)
-  /** Public interface */
-  return {
-    find,
-    addFirst,
-    addLast,
-    removeFirst,
-    removeLast,
-    insertAfter,
-    [Symbol.iterator]: iterator,
-    get length () {
-      return length
-    },
-    get first () {
-      return head ? head.data : null
-    },
-    get last () {
-      return tail ? tail.data : null
-    }
-  }
-
+class DoublyLinkedList {
   /**
    * Push all items of given array into the list.
    *
    * Performance: O(n)
    * @param {Array} input initial list data
    */
-  function initialize (input) {
-    input.forEach(addLast)
+  constructor(input = []) {
+    this.length = 0
+    this.head = null
+    this.tail = null
+    for (const item of input) this.addLast(item)
+  }
+
+  get first() {
+    return this.head ? this.head.data : null
+  }
+
+  get last() {
+    return this.tail ? this.tail.data : null
   }
 
   /**
    * Find item at the given position from the beginning of the list.
    * Position is a 0-based index:
    * A<->B<->C<->D
-   * 0  1  2  3
+   * 0   1   2   3
    *
    * Performance: O(n)
    * @param {Number} index position of queried item
    * @returns {*}
    */
-  function find (index) {
-    if (index >= length) throw RangeError(`Index ${index} is out of range.`)
+  find(index) {
     let current
-    if (index < length / 2) {
-      current = head
+    if (index >= this.length) {
+      throw RangeError(`Index ${index} is out of range.`)
+    }
+
+    if (index < this.length / 2) {
+      current = this.head
       for (let i = 0; i < index; i++) current = current.next
     } else {
-      current = tail
-      for (let i = length - 1; i > index; i--) current = current.prev
+      current = this.tail
+      for (let i = this.length - 1; i > index; i--) current = current.prev
     }
 
     return current.data
@@ -97,14 +85,10 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @param {*} item
    */
-  function addFirst (item) {
-    head = {
-      data: item,
-      next: head,
-      prev: null
-    }
-    if (tail === null) tail = head
-    length++
+  addFirst(item) {
+    this.head = new Node(item, null, this.head)
+    if (this.tail === null) this.tail = this.head
+    this.length++
   }
 
   /**
@@ -113,16 +97,13 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @param {*} item
    */
-  function addLast (item) {
-    if (tail === null) return addFirst(item)
-    const node = {
-      data: item,
-      next: null,
-      prev: tail
-    }
-    tail.next = node
-    tail = node
-    length++
+  addLast(item) {
+    if (this.tail === null) return this.addFirst(item)
+
+    const node = new Node(item, this.tail)
+    this.tail.next = node
+    this.tail = node
+    this.length++
   }
 
   /**
@@ -131,12 +112,13 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function removeFirst () {
-    if (head === null) throw RangeError("Can't remove from empty list.")
-    const item = head.data
-    head = head.next
-    if (head === null) tail = null
-    length--
+  removeFirst() {
+    if (this.head === null) throw RangeError("Can't remove from empty list.")
+
+    const item = this.head.data
+    this.head = this.head.next
+    if (this.head === null) this.tail = null
+    this.length--
 
     return item
   }
@@ -147,12 +129,13 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function removeLast () {
-    if (tail === null) throw RangeError("Can't remove from empty list.")
-    const item = tail.data
-    tail = tail.prev
-    if (tail === null) head = null
-    length--
+  removeLast() {
+    if (this.tail === null) throw RangeError("Can't remove from empty list.")
+
+    const item = this.tail.data
+    this.tail = this.tail.prev
+    if (this.tail === null) this.head = null
+    this.length--
 
     return item
   }
@@ -164,29 +147,42 @@ module.exports = (input = []) => {
    * @param {Number} index
    * @param {*} item
    */
-  function insertAfter (index, item) {
-    if (index === 0) return addFirst(item)
-    if (index === length) return addLast(item)
-    if (index > length) throw RangeError(`Index ${index} is out of range.`)
+  insertAfter(index, item) {
+    if (index === 0) return this.addFirst(item)
+    if (index === this.length) return this.addLast(item)
+    if (index > this.length) throw RangeError(`Index ${index} is out of range.`)
 
-    let current = head
+    let current = this.head
     for (let i = 0; i < index; i++) current = current.next
 
-    current.next = {
-      data: item,
-      next: current.next,
-      prev: current.prev
-    }
+    current.next = new Node(item, current, current.next)
   }
 
   /**
    * Iterate over current list.
    */
-  function* iterator () {
-    let current = head
+  *[Symbol.iterator]() {
+    let current = this.head
     while (current !== null) {
       yield current.data
       current = current.next
     }
   }
 }
+
+class Node {
+  /**
+   * Node container.
+   *
+   * @param {*} data
+   * @param {Node} prev
+   * @param {Node} next
+   */
+  constructor(data, prev = null, next = null) {
+    this.data = data
+    this.prev = prev
+    this.next = next
+  }
+}
+
+module.exports = DoublyLinkedList
