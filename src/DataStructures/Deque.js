@@ -1,4 +1,4 @@
-const createDoublyLinkedList = require('./DoublyLinkedList')
+const DoublyLinkedList = require('./DoublyLinkedList')
 /**
  * Deque (double-ended queue, pronounced "deck") is a generalization of a queue
  * where elements can be added to or removed from either the front or the back.
@@ -35,7 +35,7 @@ const createDoublyLinkedList = require('./DoublyLinkedList')
  * @param {Array} input initial deque data
  */
 module.exports = (input = []) => {
-  const list = createDoublyLinkedList()
+  const list = new DoublyLinkedList()
 
   initialize(input)
   /** Public interface */
@@ -44,13 +44,13 @@ module.exports = (input = []) => {
     unshift,
     pop,
     shift,
-    get length () {
+    get length() {
       return list.length
     },
-    get first () {
+    get first() {
       return list.first
     },
-    get last () {
+    get last() {
       return list.last
     }
   }
@@ -61,7 +61,7 @@ module.exports = (input = []) => {
    * Performance: O(n)
    * @param {Array} input initial deque data
    */
-  function initialize (input) {
+  function initialize(input) {
     input.forEach(push)
   }
 
@@ -71,7 +71,7 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @param {*} item
    */
-  function push (item) {
+  function push(item) {
     list.addLast(item)
   }
 
@@ -81,7 +81,7 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @param {*} item
    */
-  function unshift (item) {
+  function unshift(item) {
     list.addFirst(item)
   }
 
@@ -91,7 +91,7 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function pop () {
+  function pop() {
     if (list.length === 0) throw RangeError("Can't pop empty queue.")
     return list.removeLast()
   }
@@ -102,7 +102,7 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function shift () {
+  function shift() {
     if (list.length === 0) throw RangeError("Can't shift empty queue.")
     return list.removeFirst()
   }

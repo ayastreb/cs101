@@ -1,4 +1,4 @@
-const createSinglyLinkedList = require('./SinglyLinkedList')
+const SinglyLinkedList = require('./SinglyLinkedList')
 /**
  * Stack is an abstract data type with last in first out (LIFO) order of elements.
  * Stack allows adding and removing items only at one end of the structure.
@@ -23,7 +23,7 @@ const createSinglyLinkedList = require('./SinglyLinkedList')
  * @param {Array} input initial stack data
  */
 module.exports = (input = []) => {
-  const list = createSinglyLinkedList()
+  const list = new SinglyLinkedList()
 
   initialize(input)
   /** Public interface */
@@ -31,7 +31,7 @@ module.exports = (input = []) => {
     peek,
     push,
     pop,
-    get length () {
+    get length() {
       return list.length
     }
   }
@@ -42,7 +42,7 @@ module.exports = (input = []) => {
    * Performance: O(n)
    * @param {Array} input initial stack data
    */
-  function initialize (input) {
+  function initialize(input) {
     input.forEach(push)
   }
 
@@ -52,7 +52,7 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function peek () {
+  function peek() {
     return list.first
   }
 
@@ -62,7 +62,7 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @param {*} item
    */
-  function push (item) {
+  function push(item) {
     list.addFirst(item)
   }
 
@@ -72,7 +72,7 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function pop () {
+  function pop() {
     if (list.length === 0) throw RangeError("Can't pop from empty stack.")
     return list.removeFirst()
   }

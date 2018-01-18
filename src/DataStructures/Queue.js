@@ -1,4 +1,4 @@
-const createSinglyLinkedList = require('./SinglyLinkedList')
+const SinglyLinkedList = require('./SinglyLinkedList')
 /**
  * Queue is a first in first out (FIFO) abstract data type (opposite to Stack).
  * The first element added to the queue will be the first one to be removed.
@@ -21,7 +21,7 @@ const createSinglyLinkedList = require('./SinglyLinkedList')
  * @param {Array} input initial queue data
  */
 module.exports = (input = []) => {
-  const list = createSinglyLinkedList()
+  const list = new SinglyLinkedList()
 
   initialize(input)
   /** Public interface */
@@ -29,7 +29,7 @@ module.exports = (input = []) => {
     peek,
     enqueue,
     dequeue,
-    get length () {
+    get length() {
       return list.length
     }
   }
@@ -40,7 +40,7 @@ module.exports = (input = []) => {
    * Performance: O(n)
    * @param {Array} input initial queue data
    */
-  function initialize (input) {
+  function initialize(input) {
     input.forEach(enqueue)
   }
 
@@ -50,7 +50,7 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function peek () {
+  function peek() {
     return list.first
   }
 
@@ -60,7 +60,7 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @param {*} item
    */
-  function enqueue (item) {
+  function enqueue(item) {
     list.addLast(item)
   }
 
@@ -70,7 +70,7 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function dequeue () {
+  function dequeue() {
     if (list.length === 0) throw RangeError("Can't dequeue empty queue.")
     return list.removeFirst()
   }
