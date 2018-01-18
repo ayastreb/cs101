@@ -1,4 +1,4 @@
-const createQueue = require('../DataStructures/Queue')
+const Queue = require('../DataStructures/Queue')
 /**
  * Given an input string we need to check if all parentheses are balanced (closed).
  *
@@ -10,7 +10,7 @@ const createQueue = require('../DataStructures/Queue')
 module.exports = input => {
   const OPEN = '('
   const CLOSED = ')'
-  const queue = createQueue()
+  const queue = new Queue()
 
   const parentheses = input.split('')
   for (let position = 0; position < parentheses.length; position++) {

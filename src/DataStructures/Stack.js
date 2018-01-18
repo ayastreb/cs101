@@ -9,8 +9,8 @@ const SinglyLinkedList = require('./SinglyLinkedList')
  * Stacks are also used in memory management, functions call stack and recursive calls.
  *
  * Usage:
- * const createStack = require('./Stack')
- * const stack = createStack([ 'A', 'B', 'C' ]) // stack = C->B->A
+ * const Stack = require('./Stack')
+ * const stack = Stack([ 'A', 'B', 'C' ]) // stack = C->B->A
  * stack.peek()    // => 'C', stack = C->B->A
  * stack.push('D') // stack = D->C->B->A
  * stack.pop()     // => 'D', stack = C->B->A
@@ -19,31 +19,20 @@ const SinglyLinkedList = require('./SinglyLinkedList')
  * stack.pop()     // => B, stack = A
  * stack.pop()     // => A, stack = null
  * stack.pop()     // throws RangeError when trying to pop empty stack
- *
- * @param {Array} input initial stack data
  */
-module.exports = (input = []) => {
-  const list = new SinglyLinkedList()
-
-  initialize(input)
-  /** Public interface */
-  return {
-    peek,
-    push,
-    pop,
-    get length() {
-      return list.length
-    }
-  }
-
+module.exports = class Stack {
   /**
-   * Push all elements of given array into the stack.
+   * Create stack.
    *
-   * Performance: O(n)
    * @param {Array} input initial stack data
    */
-  function initialize(input) {
-    input.forEach(push)
+  constructor(input = []) {
+    this.list = new SinglyLinkedList()
+    for (const item of input) this.push(item)
+  }
+
+  get length() {
+    return this.list.length
   }
 
   /**
@@ -52,8 +41,8 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function peek() {
-    return list.first
+  peek() {
+    return this.list.first
   }
 
   /**
@@ -62,8 +51,8 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @param {*} item
    */
-  function push(item) {
-    list.addFirst(item)
+  push(item) {
+    this.list.addFirst(item)
   }
 
   /**
@@ -72,8 +61,8 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function pop() {
-    if (list.length === 0) throw RangeError("Can't pop from empty stack.")
-    return list.removeFirst()
+  pop() {
+    if (this.list.length === 0) throw RangeError("Can't pop from empty stack.")
+    return this.list.removeFirst()
   }
 }

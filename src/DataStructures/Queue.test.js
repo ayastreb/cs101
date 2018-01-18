@@ -1,14 +1,14 @@
 const test = require('tape')
-const createQueue = require('./Queue')
+const Queue = require('./Queue')
 
 test('peek on empty queue', assert => {
-  const queue = createQueue()
+  const queue = new Queue()
   assert.strictEqual(queue.peek(), null)
   assert.end()
 })
 
 test('enqueue items to the queue', assert => {
-  const queue = createQueue()
+  const queue = new Queue()
   queue.enqueue('foo')
   queue.enqueue('bar')
   assert.equal(queue.length, 2)
@@ -17,7 +17,7 @@ test('enqueue items to the queue', assert => {
 })
 
 test('dequeue items from the queue', assert => {
-  const queue = createQueue()
+  const queue = new Queue()
   queue.enqueue('A')
   queue.enqueue('B')
   queue.enqueue('C')
@@ -28,7 +28,7 @@ test('dequeue items from the queue', assert => {
 })
 
 test('create queue from array', assert => {
-  const queue = createQueue([ 'A', 'B', 'C' ])
+  const queue = new Queue(['A', 'B', 'C'])
   assert.equal(queue.peek(), 'A')
   assert.equal(queue.dequeue(), 'A')
   assert.equal(queue.dequeue(), 'B')
@@ -37,7 +37,7 @@ test('create queue from array', assert => {
 })
 
 test('throws error when trying to dequeue empty queue', assert => {
-  const queue = createQueue()
+  const queue = new Queue()
   assert.throws(() => queue.dequeue(), RangeError)
   assert.end()
 })

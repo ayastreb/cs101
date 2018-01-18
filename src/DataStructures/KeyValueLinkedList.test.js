@@ -1,8 +1,8 @@
 const test = require('tape')
-const createLinkedList = require('./KeyValueLinkedList')
+const LinkedList = require('./KeyValueLinkedList')
 
 test('insert', assert => {
-  const list = createLinkedList()
+  const list = new LinkedList()
   list.insert('A', 1)
   list.insert('B', 2)
   list.insert('C', 3)
@@ -14,7 +14,7 @@ test('insert', assert => {
 })
 
 test('find node', assert => {
-  const list = createLinkedList()
+  const list = new LinkedList()
   list.insert('A', 1)
   list.insert('B', 2)
   list.insert('C', 3)
@@ -27,7 +27,7 @@ test('find node', assert => {
 })
 
 test('remove non existing', assert => {
-  const list = createLinkedList()
+  const list = new LinkedList()
   list.insert('A', 1)
   list.insert('B', 2)
   list.insert('C', 3)
@@ -39,7 +39,7 @@ test('remove non existing', assert => {
 })
 
 test('remove from head', assert => {
-  const list = createLinkedList()
+  const list = new LinkedList()
   list.insert('A', 1)
   list.insert('B', 2)
   list.insert('C', 3)
@@ -56,7 +56,7 @@ test('remove from head', assert => {
 })
 
 test('remove in the middle', assert => {
-  const list = createLinkedList()
+  const list = new LinkedList()
   list.insert('A', 1)
   list.insert('B', 2)
   list.insert('C', 3)
@@ -73,7 +73,7 @@ test('remove in the middle', assert => {
 })
 
 test('remove from tail', assert => {
-  const list = createLinkedList()
+  const list = new LinkedList()
   list.insert('A', 1)
   list.insert('B', 2)
   list.insert('C', 3)
@@ -90,7 +90,7 @@ test('remove from tail', assert => {
 })
 
 test('remove all', assert => {
-  const list = createLinkedList()
+  const list = new LinkedList()
   list.insert('A', 1)
   list.insert('B', 2)
   list.insert('C', 3)

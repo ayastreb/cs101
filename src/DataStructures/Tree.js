@@ -1,5 +1,5 @@
-const createQueue = require('./Queue')
-const createStack = require('./Stack')
+const Queue = require('./Queue')
+const Stack = require('./Stack')
 /**
  * Abstract tree is a non-linear data structure where one node can be linked
  * to multiple other nodes. Tree always starts with a root node and has no cycles,
@@ -8,25 +8,15 @@ const createStack = require('./Stack')
  * Trees are used to represent hierarchy (e.g. disk file system or class inheritance)
  * and also could be used for search (e.g. Binary Search Tree).
  */
-module.exports = createTree
 
-function createTree (input) {
-  const children = []
-  let parent = null
-  let size = 1
-  let height = 0
-  let depth = 0
-
-  return {
-    label: input,
-    children,
-    parent,
-    size,
-    height,
-    depth,
-    insert,
-    traverseBFS,
-    traverseDFS
+class Tree {
+  constructor(label) {
+    this.children = []
+    this.parent = null
+    this.size = 1
+    this.height = 0
+    this.depth = 0
+    this.label = label
   }
 
   /**
@@ -38,10 +28,10 @@ function createTree (input) {
    * @param {string|number} value
    * @returns {object}
    */
-  function insert (value) {
-    const child = createTree(value)
+  insert(item) {
+    const child = new Tree(item)
     child.parent = this
-    children.push(child)
+    this.children.push(child)
 
     let parent = child.parent
     while (parent !== null) {
@@ -61,15 +51,15 @@ function createTree (input) {
    * Performance: O(n)
    * @param {function} fn
    */
-  function traverseBFS (fn) {
-    const queue = createQueue()
+  traverseBFS(fn) {
+    const queue = new Queue()
     queue.enqueue(this)
 
     while (queue.length > 0) {
       const node = queue.dequeue()
       if (fn(node.label) === false) return
 
-      node.children.forEach(child => queue.enqueue(child))
+      for (const child of node.children) queue.enqueue(child)
     }
   }
 
@@ -80,15 +70,17 @@ function createTree (input) {
    * Performance: O(n)
    * @param fn
    */
-  function traverseDFS (fn) {
-    const stack = createStack()
+  traverseDFS(fn) {
+    const stack = new Stack()
     stack.push(this)
 
     while (stack.length > 0) {
       const node = stack.pop()
       if (fn(node.label) === false) return
 
-      node.children.reverse().forEach(child => stack.push(child))
+      for (const child of node.children.reverse()) stack.push(child)
     }
   }
 }
+
+module.exports = Tree

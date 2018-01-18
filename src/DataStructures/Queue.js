@@ -7,8 +7,8 @@ const SinglyLinkedList = require('./SinglyLinkedList')
  * Queues are used to process buffers and events.
  *
  * Usage:
- * const createQueue = require('./Queue')
- * const queue = createQueue([ 'A', 'B', 'C' ]) // queue = A->B->C
+ * const Queue = require('./Queue')
+ * const queue = new Queue([ 'A', 'B', 'C' ]) // queue = A->B->C
  * queue.peek() // => 'A', queue = A->B->C
  * queue.enqueue('D') // queue = A->B->C->D
  * queue.dequeue() // => 'A', queue = B->C->D
@@ -17,31 +17,21 @@ const SinglyLinkedList = require('./SinglyLinkedList')
  * queue.dequeue() // => 'C', queue = D
  * queue.dequeue() // => 'D', queue = null
  * queue.dequeue() // throws RangeError when trying to dequeue empty queue
- *
- * @param {Array} input initial queue data
  */
-module.exports = (input = []) => {
-  const list = new SinglyLinkedList()
-
-  initialize(input)
-  /** Public interface */
-  return {
-    peek,
-    enqueue,
-    dequeue,
-    get length() {
-      return list.length
-    }
-  }
-
+module.exports = class Queue {
   /**
-   * Add all elements of given array to the queue.
+   * Create queue.
    *
-   * Performance: O(n)
    * @param {Array} input initial queue data
    */
-  function initialize(input) {
-    input.forEach(enqueue)
+  constructor(input = []) {
+    this.list = new SinglyLinkedList()
+
+    for (const item of input) this.enqueue(item)
+  }
+
+  get length() {
+    return this.list.length
   }
 
   /**
@@ -50,8 +40,8 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function peek() {
-    return list.first
+  peek() {
+    return this.list.first
   }
 
   /**
@@ -60,8 +50,8 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @param {*} item
    */
-  function enqueue(item) {
-    list.addLast(item)
+  enqueue(item) {
+    this.list.addLast(item)
   }
 
   /**
@@ -70,8 +60,8 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function dequeue() {
-    if (list.length === 0) throw RangeError("Can't dequeue empty queue.")
-    return list.removeFirst()
+  dequeue() {
+    if (this.list.length === 0) throw RangeError("Can't dequeue empty queue.")
+    return this.list.removeFirst()
   }
 }

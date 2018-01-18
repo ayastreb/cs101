@@ -1,14 +1,14 @@
 const test = require('tape')
-const createStack = require('./Stack')
+const Stack = require('./Stack')
 
 test('peek on empty stack', assert => {
-  const stack = createStack()
+  const stack = new Stack()
   assert.strictEqual(stack.peek(), null)
   assert.end()
 })
 
 test('push items to the stack', assert => {
-  const stack = createStack()
+  const stack = new Stack()
   stack.push('foo')
   stack.push('bar')
   assert.equal(stack.length, 2)
@@ -17,7 +17,7 @@ test('push items to the stack', assert => {
 })
 
 test('pop items from the stack', assert => {
-  const stack = createStack()
+  const stack = new Stack()
   stack.push('A')
   stack.push('B')
   stack.push('C')
@@ -29,7 +29,7 @@ test('pop items from the stack', assert => {
 })
 
 test('create stack from array', assert => {
-  const stack = createStack([ 'A', 'B', 'C' ])
+  const stack = new Stack(['A', 'B', 'C'])
   assert.equal(stack.peek(), 'C')
   assert.equal(stack.pop(), 'C')
   assert.equal(stack.pop(), 'B')
@@ -38,7 +38,7 @@ test('create stack from array', assert => {
 })
 
 test('throws error when trying to pop empty stack', assert => {
-  const stack = createStack()
+  const stack = new Stack()
   assert.throws(() => stack.pop(), RangeError)
   assert.end()
 })

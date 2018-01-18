@@ -1,4 +1,4 @@
-const createStack = require('../DataStructures/Stack')
+const Stack = require('../DataStructures/Stack')
 /**
  * Reverse Postfix Notation, also known as Reverse Polish Notation,
  * is a mathematical notation in which every operator follows all of its operands.
@@ -18,7 +18,7 @@ const createStack = require('../DataStructures/Stack')
 module.exports = input => {
   validate(input)
 
-  const stack = createStack()
+  const stack = new Stack()
   const processors = {
     '+': (right, left) => left + right,
     '-': (right, left) => left - right,
@@ -47,7 +47,7 @@ module.exports = input => {
    *
    * @param {String} input
    */
-  function validate (input) {
+  function validate(input) {
     if (!/^[0-9+\-/*^\s.]+$/.test(input)) {
       throw new TypeError('Invalid input!')
     }

@@ -18,8 +18,8 @@ const DoublyLinkedList = require('./DoublyLinkedList')
  * Intel's Threading Building Blocks (TBB) library for parallel programming.
  *
  * Usage:
- * const createDeque = require('./Deque')
- * const deque = createDeque([ 'A', 'B', 'C' ]) // deque = A->B->C
+ * const Deque = require('./Deque')
+ * const deque = new Deque([ 'A', 'B', 'C' ]) // deque = A->B->C
  * deque.first()      // => 'A', deque = A->B->C
  * deque.last()       // => 'C', deque = A->B->C
  * deque.push('D')    // deque = A->B->C->D
@@ -31,38 +31,28 @@ const DoublyLinkedList = require('./DoublyLinkedList')
  * deque.pop()        // => 'B', deque = A
  * deque.pop()        // => 'A', deque = null
  * deque.pop()        // throws RangeError when trying to remove from empty queue
- *
- * @param {Array} input initial deque data
  */
-module.exports = (input = []) => {
-  const list = new DoublyLinkedList()
-
-  initialize(input)
-  /** Public interface */
-  return {
-    push,
-    unshift,
-    pop,
-    shift,
-    get length() {
-      return list.length
-    },
-    get first() {
-      return list.first
-    },
-    get last() {
-      return list.last
-    }
-  }
-
+class Deque {
   /**
-   * Add all elements of given array to the deque.
+   * Create deque.
    *
-   * Performance: O(n)
    * @param {Array} input initial deque data
    */
-  function initialize(input) {
-    input.forEach(push)
+  constructor(input = []) {
+    this.list = new DoublyLinkedList()
+    for (const item of input) this.push(item)
+  }
+
+  get length() {
+    return this.list.length
+  }
+
+  get first() {
+    return this.list.first
+  }
+
+  get last() {
+    return this.list.last
   }
 
   /**
@@ -71,8 +61,8 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @param {*} item
    */
-  function push(item) {
-    list.addLast(item)
+  push(item) {
+    this.list.addLast(item)
   }
 
   /**
@@ -81,8 +71,8 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @param {*} item
    */
-  function unshift(item) {
-    list.addFirst(item)
+  unshift(item) {
+    this.list.addFirst(item)
   }
 
   /**
@@ -91,9 +81,9 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function pop() {
-    if (list.length === 0) throw RangeError("Can't pop empty queue.")
-    return list.removeLast()
+  pop() {
+    if (this.list.length === 0) throw RangeError("Can't pop empty queue.")
+    return this.list.removeLast()
   }
 
   /**
@@ -102,8 +92,10 @@ module.exports = (input = []) => {
    * Performance: O(1)
    * @returns {*}
    */
-  function shift() {
-    if (list.length === 0) throw RangeError("Can't shift empty queue.")
-    return list.removeFirst()
+  shift() {
+    if (this.list.length === 0) throw RangeError("Can't shift empty queue.")
+    return this.list.removeFirst()
   }
 }
+
+module.exports = Deque

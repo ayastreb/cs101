@@ -1,4 +1,4 @@
-const createQueue = require('../DataStructures/Queue')
+const Queue = require('../DataStructures/Queue')
 /**
  * Given a binary tree, traverse it in level order, e.g. print each level of
  * the tree in a separate line.
@@ -9,7 +9,7 @@ const createQueue = require('../DataStructures/Queue')
 module.exports = root => {
   let pendingNodes = 0
   const output = []
-  const queue = createQueue()
+  const queue = new Queue()
   queue.enqueue(root)
 
   while (queue.length > 0) {
