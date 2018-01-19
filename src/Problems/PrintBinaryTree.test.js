@@ -1,9 +1,9 @@
 const test = require('tape')
-const createBinarySearchTree = require('../DataStructures/BinarySearchTree')
+const BinarySearchTree = require('../DataStructures/BinarySearchTree')
 const printer = require('./PrintBinaryTree')
 
 test('pretty print binary tree', assert => {
-  const tree = createBinarySearchTree('D')
+  const tree = new BinarySearchTree('D')
   tree.insert('B')
   tree.insert('C')
   tree.insert('A')
@@ -11,6 +11,7 @@ test('pretty print binary tree', assert => {
   tree.insert('E')
   tree.insert('G')
 
+  // prettier-ignore
   const expected =
 `      (D)      
    ┌---┴---┐   
@@ -23,7 +24,7 @@ test('pretty print binary tree', assert => {
 })
 
 test('pretty print skewed binary tree', assert => {
-  const tree = createBinarySearchTree(5)
+  const tree = new BinarySearchTree(5)
   tree.insert(0)
   tree.insert(3)
   tree.insert(2)
@@ -34,6 +35,7 @@ test('pretty print skewed binary tree', assert => {
   tree.insert(8)
   tree.insert(9)
 
+  // prettier-ignore
   const expected =
 `                              (5)                              
                ┌---------------┴---------------┐               

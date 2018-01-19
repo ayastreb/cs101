@@ -7,26 +7,14 @@ const Stack = require('./Stack')
  * Because BST is sorted it is possible to use principle of binary search when
  * inserting or looking up values.
  * In order depth first search of a binary tree results in sorted input values.
- *
- * @type {createBinarySearchTree}
  */
-module.exports = createBinarySearchTree
+class BinarySearchTree {
+  constructor(value) {
+    if (value === undefined) throw new TypeError('Initial value is required!')
 
-function createBinarySearchTree(value) {
-  if (value === undefined) throw new TypeError('Initial value is required!')
-
-  let left = null
-  let right = null
-
-  return {
-    value,
-    left,
-    right,
-    insert,
-    find,
-    traverseInOrder,
-    serialize,
-    [Symbol.iterator]: iterator
+    this.value = value
+    this.left = null
+    this.right = null
   }
 
   /**
@@ -35,7 +23,7 @@ function createBinarySearchTree(value) {
    * Performance: O(log(n)) on average, depends on tree height
    * @param {string|number} value
    */
-  function insert(value) {
+  insert(value) {
     let parent
     let current = this
     while (current) {
@@ -43,7 +31,7 @@ function createBinarySearchTree(value) {
       current = value < current.value ? current.left : current.right
     }
 
-    const child = createBinarySearchTree(value)
+    const child = new BinarySearchTree(value)
     if (value < parent.value) {
       parent.left = child
     } else {
@@ -60,7 +48,7 @@ function createBinarySearchTree(value) {
    * @param {string|number} value
    * @returns {boolean}
    */
-  function find(value) {
+  find(value) {
     let current = this
     while (current) {
       if (value === current.value) return true
@@ -78,7 +66,7 @@ function createBinarySearchTree(value) {
    * Performance: O(n)
    * @param {function} fn
    */
-  function traverseInOrder(fn) {
+  traverseInOrder(fn) {
     const visit = node => {
       if (node) {
         visit(node.left)
@@ -90,7 +78,28 @@ function createBinarySearchTree(value) {
     visit(this)
   }
 
-  function serialize() {
+  /**
+   * Traverse the tree using in order depth first search.
+   * Implemented without recursion.
+   *
+   * Performance: O(n)
+   */
+  *[Symbol.iterator]() {
+    const stack = new Stack()
+    let node = this
+    while (stack.length > 0 || node) {
+      if (node) {
+        stack.push(node)
+        node = node.left
+      } else {
+        node = stack.pop()
+        yield node.value
+        node = node.right
+      }
+    }
+  }
+
+  serialize() {
     const buffer = []
     const traverse = node => {
       if (node === null) {
@@ -106,25 +115,6 @@ function createBinarySearchTree(value) {
 
     return buffer.join(',')
   }
-
-  /**
-   * Traverse the tree using in order depth first search.
-   * Implemented without recursion.
-   *
-   * Performance: O(n)
-   */
-  function* iterator() {
-    const stack = new Stack()
-    let node = this
-    while (stack.length > 0 || node) {
-      if (node) {
-        stack.push(node)
-        node = node.left
-      } else {
-        node = stack.pop()
-        yield node.value
-        node = node.right
-      }
-    }
-  }
 }
+
+module.exports = BinarySearchTree
