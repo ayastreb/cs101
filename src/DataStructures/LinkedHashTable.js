@@ -16,31 +16,28 @@ const LinkedList = require('./KeyValueLinkedList')
  * database indexes etc.
  *
  * Usage:
- * const createHashTable = require('./LinkedHashTable')
- * const hashTable = createHashTable()
+ * const HashTable = require('./LinkedHashTable')
+ * const hashTable = new HashTable()
  * hashTable.set('A', 'B')
  * hashTable.get('A') // => 'B'
  * hashTable.remove('A') // => true
  * hashTable.get('A') // => undefined
- *
- * @param {Function} hash
  */
-module.exports = (hash = stringHash) => {
-  const UPPER_LOAD_LIMIT = 0.75
-  const LOWER_LOAD_LIMIT = 0.25
+const UPPER_LOAD_LIMIT = 0.75
+const LOWER_LOAD_LIMIT = 0.25
 
-  let size = 0
-  let dimension = 2
-  let table = new Array(dimension)
-
-  return {
-    get size() {
-      return size
-    },
-    set,
-    has,
-    get,
-    remove
+class LinkedHashTable {
+  /**
+   * Create hash table with given hash function.
+   * StringHash used by default.
+   *
+   * @param {Function} hashFn
+   */
+  constructor(hashFn = stringHash) {
+    this.hashFn = hashFn
+    this.size = 0
+    this.dimension = 2
+    this.table = new Array(this.dimension)
   }
 
   /**
@@ -50,15 +47,15 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @param {*} value
    */
-  function set(key, value) {
-    const bucket = getBucketFor(key)
+  set(key, value) {
+    const bucket = this._getBucketFor(key)
     const node = bucket.find(key)
     if (node) {
       node.value = value
     } else {
       bucket.insert(key, value)
-      size++
-      resizeIfNeeded()
+      this.size++
+      this._resizeIfNeeded()
     }
   }
 
@@ -69,8 +66,8 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {boolean}
    */
-  function has(key) {
-    return getBucketFor(key).find(key) !== undefined
+  has(key) {
+    return this._getBucketFor(key).find(key) !== undefined
   }
 
   /**
@@ -80,8 +77,8 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {*} value for given key or null if not found
    */
-  function get(key) {
-    const node = getBucketFor(key).find(key)
+  get(key) {
+    const node = this._getBucketFor(key).find(key)
 
     return node && node.value
   }
@@ -93,14 +90,14 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {Boolean} true if value was found, false otherwise
    */
-  function remove(key) {
-    const bucket = getBucketFor(key)
+  remove(key) {
+    const bucket = this._getBucketFor(key)
     const node = bucket.find(key)
     if (!node) return false
 
     bucket.remove(node)
-    size--
-    resizeIfNeeded()
+    this.size--
+    this._resizeIfNeeded()
     return true
   }
 
@@ -110,43 +107,42 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {*} linked list
    */
-  function getBucketFor(key) {
+  _getBucketFor(key) {
     if (typeof key !== 'string' && typeof key !== 'number') {
       throw TypeError('Key must be a string or a number.')
     }
-    const index = hash(key) % dimension
-    if (!table[index]) table[index] = new LinkedList()
+    const index = this.hashFn(key) % this.dimension
+    if (!this.table[index]) this.table[index] = new LinkedList()
 
-    return table[index]
+    return this.table[index]
   }
 
   /**
    * Increase or decrease underlying table when load factor goes up or down.
    */
-  function resizeIfNeeded() {
-    if (loadFactor() >= UPPER_LOAD_LIMIT) {
-      dimension = dimension * 2
-    } else if (loadFactor() < LOWER_LOAD_LIMIT) {
-      dimension = dimension / 2
+  _resizeIfNeeded() {
+    const loadFactor = this.size / this.dimension
+    if (loadFactor >= UPPER_LOAD_LIMIT) {
+      this.dimension *= 2
+    } else if (loadFactor < LOWER_LOAD_LIMIT) {
+      this.dimension /= 2
     } else {
       return
     }
 
-    const resized = new Array(dimension)
-    for (let i = 0; i < table.length; i++) {
-      if (table[i] !== undefined) {
-        table[i].keys().forEach(key => {
-          const index = hash(key) % dimension
+    const resized = new Array(this.dimension)
+    for (let i = 0; i < this.table.length; i++) {
+      if (this.table[i] !== undefined) {
+        this.table[i].keys().forEach(key => {
+          const index = this.hashFn(key) % this.dimension
           if (!resized[index]) resized[index] = new LinkedList()
-          resized[index].insert(key, table[i].find(key).value)
+          resized[index].insert(key, this.table[i].find(key).value)
         })
       }
     }
 
-    table = resized
-  }
-
-  function loadFactor() {
-    return size / dimension
+    this.table = resized
   }
 }
+
+module.exports = LinkedHashTable

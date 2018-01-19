@@ -1,13 +1,13 @@
 const test = require('tape')
-const createLinkedHashTable = require('./LinkedHashTable')
-const createLinearHashTable = require('./LinearHashTable')
+const LinkedHashTable = require('./LinkedHashTable')
+const LinearHashTable = require('./LinearHashTable')
 
-runTestSuite('LinkedHashTable', createLinkedHashTable)
-runTestSuite('LinearHashTable', createLinearHashTable)
+runTestSuite('LinkedHashTable', LinkedHashTable)
+runTestSuite('LinearHashTable', LinearHashTable)
 
-function runTestSuite (name, createHashTable) {
+function runTestSuite(name, HashTable) {
   test(`${name}: set values`, assert => {
-    const hashTable = createHashTable()
+    const hashTable = new HashTable()
     hashTable.set('foo', 'bar')
     hashTable.set('baz', 'bad')
     hashTable.set('abcd', 'abcd1')
@@ -26,7 +26,7 @@ function runTestSuite (name, createHashTable) {
   })
 
   test(`${name}: falsy values`, assert => {
-    const hashTable = createHashTable()
+    const hashTable = new HashTable()
     hashTable.set('false_value', false)
     hashTable.set('null_value', null)
     hashTable.set('zero_value', 0)
@@ -50,7 +50,7 @@ function runTestSuite (name, createHashTable) {
   })
 
   test(`${name}: remove values`, assert => {
-    const hashTable = createHashTable(input => input.split('_')[1])
+    const hashTable = new HashTable(input => input.split('_')[1])
     hashTable.set('foo_10', 1)
     hashTable.set('baz_10', 2)
     hashTable.set('bar_10', 3)
@@ -85,7 +85,7 @@ function runTestSuite (name, createHashTable) {
   })
 
   test(`${name}: remove circular with overflow`, assert => {
-    const hashTable = createHashTable(input => input.split('_')[1])
+    const hashTable = new HashTable(input => input.split('_')[1])
     hashTable.set('foo_10', 1)
     hashTable.set('baz_10', 2)
     hashTable.set('bar_10', 3)
@@ -115,7 +115,7 @@ function runTestSuite (name, createHashTable) {
   })
 
   test(`${name}: remove when next is higher`, assert => {
-    const hashTable = createHashTable(input => input.split('_')[1])
+    const hashTable = new HashTable(input => input.split('_')[1])
     hashTable.set('foo_1', 1)
     hashTable.set('baz_1', 2)
     hashTable.set('bar_1', 3)
@@ -136,7 +136,7 @@ function runTestSuite (name, createHashTable) {
   })
 
   test(`${name}: big input`, assert => {
-    const hashTable = createHashTable()
+    const hashTable = new HashTable()
     const n = 10000
     for (let i = 0; i < n; i++) {
       hashTable.set(`key_${i}`, i * 2)

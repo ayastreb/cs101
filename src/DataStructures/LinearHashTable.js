@@ -15,31 +15,28 @@ const stringHash = require('../StringHash')
  * database indexes etc.
  *
  * Usage:
- * const createHashTable = require('./LinkedHashTable')
- * const hashTable = createHashTable()
+ * const HashTable = require('./LinearHashTable')
+ * const hashTable = HashTable()
  * hashTable.set('A', 'B')
  * hashTable.get('A') // => 'B'
  * hashTable.remove('A') // => true
  * hashTable.get('A') // => undefined
- *
- * @param {Function} hash
  */
-module.exports = (hash = stringHash) => {
-  const UPPER_LOAD_LIMIT = 0.75
-  const LOWER_LOAD_LIMIT = 0.25
+const UPPER_LOAD_LIMIT = 0.75
+const LOWER_LOAD_LIMIT = 0.25
 
-  let size = 0
-  let dimension = 2
-  let table = new Array(dimension)
-
-  return {
-    get size () {
-      return size
-    },
-    set,
-    has,
-    get,
-    remove
+class LinearHashTable {
+  /**
+   * Create hash table with given hash function.
+   * StringHash used by default.
+   *
+   * @param {Function} hashFn
+   */
+  constructor(hashFn = stringHash) {
+    this.hashFn = hashFn
+    this.size = 0
+    this.dimension = 2
+    this.table = new Array(this.dimension)
   }
 
   /**
@@ -49,14 +46,14 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @param {*} value
    */
-  function set (key, value) {
-    const index = indexOf(key)
-    if (table[index] && table[index].key === key) {
-      table[index].value = value
+  set(key, value) {
+    const index = this._indexOf(key)
+    if (this.table[index] && this.table[index].key === key) {
+      this.table[index].value = value
     } else {
-      table[index] = { key, value }
-      size++
-      resizeIfNeeded()
+      this.table[index] = { key, value }
+      this.size++
+      this._resizeIfNeeded()
     }
   }
 
@@ -67,10 +64,10 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {boolean}
    */
-  function has (key) {
-    const index = indexOf(key)
+  has(key) {
+    const index = this._indexOf(key)
 
-    return table[index] !== undefined
+    return this.table[index] !== undefined
   }
 
   /**
@@ -80,10 +77,10 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {*}
    */
-  function get (key) {
-    const index = indexOf(key)
+  get(key) {
+    const index = this._indexOf(key)
 
-    return table[index] && table[index].value
+    return this.table[index] && this.table[index].value
   }
 
   /**
@@ -92,22 +89,22 @@ module.exports = (hash = stringHash) => {
    * Performance: O(1)
    * @param {string|number} key
    */
-  function remove (key) {
-    let index = indexOf(key)
-    if (table[index] === undefined) return false
+  remove(key) {
+    let index = this._indexOf(key)
+    if (this.table[index] === undefined) return false
 
     let next = index
-    while (table[next] !== undefined) {
-      let naturalNext = hash(table[next].key) % dimension
+    while (this.table[next] !== undefined) {
+      let naturalNext = this.hashFn(this.table[next].key) % this.dimension
       if (naturalNext <= index || naturalNext > next) {
-        table[index] = table[next]
+        this.table[index] = this.table[next]
         index = next
       }
-      next = (next + 1) % dimension
+      next = (next + 1) % this.dimension
     }
-    table[index] = undefined
-    size--
-    resizeIfNeeded()
+    this.table[index] = undefined
+    this.size--
+    this._resizeIfNeeded()
   }
 
   /**
@@ -116,15 +113,15 @@ module.exports = (hash = stringHash) => {
    * @param {string|number} key
    * @returns {number}
    */
-  function indexOf (key) {
+  _indexOf(key) {
     if (typeof key !== 'string' && typeof key !== 'number') {
       throw TypeError('Key must be a string or a number.')
     }
 
-    let index = hash(key) % dimension
-    while (table[index] !== undefined) {
-      if (table[index].key === key) return index
-      index = (index + 1) % dimension
+    let index = this.hashFn(key) % this.dimension
+    while (this.table[index] !== undefined) {
+      if (this.table[index].key === key) return index
+      index = (index + 1) % this.dimension
     }
 
     return index
@@ -133,30 +130,29 @@ module.exports = (hash = stringHash) => {
   /**
    * Increase or decrease underlying table when load factor goes up or down.
    */
-  function resizeIfNeeded () {
-    if (loadFactor() >= UPPER_LOAD_LIMIT) {
-      dimension = dimension * 2
-    } else if (loadFactor() < LOWER_LOAD_LIMIT) {
-      dimension = dimension / 2
+  _resizeIfNeeded() {
+    const loadFactor = this.size / this.dimension
+    if (loadFactor >= UPPER_LOAD_LIMIT) {
+      this.dimension *= 2
+    } else if (loadFactor < LOWER_LOAD_LIMIT) {
+      this.dimension /= 2
     } else {
       return
     }
 
-    const resized = new Array(dimension)
-    for (let i = 0; i < table.length; i++) {
-      if (table[i] !== undefined) {
-        let index = hash(table[i].key) % dimension
+    const resized = new Array(this.dimension)
+    for (let i = 0; i < this.table.length; i++) {
+      if (this.table[i] !== undefined) {
+        let index = this.hashFn(this.table[i].key) % this.dimension
         while (resized[index] !== undefined) {
-          index = (index + 1) % dimension
+          index = (index + 1) % this.dimension
         }
-        resized[index] = table[i]
+        resized[index] = this.table[i]
       }
     }
 
-    table = resized
-  }
-
-  function loadFactor () {
-    return size / dimension
+    this.table = resized
   }
 }
+
+module.exports = LinearHashTable

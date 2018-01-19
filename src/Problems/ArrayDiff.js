@@ -1,4 +1,4 @@
-const createHashTable = require('../DataStructures/LinkedHashTable')
+const HashTable = require('../DataStructures/LinkedHashTable')
 /**
  * Given two arrays, find the difference between them.
  * Example:
@@ -14,9 +14,10 @@ const createHashTable = require('../DataStructures/LinkedHashTable')
  * @param {Array} second
  */
 module.exports = (first, second) => {
-  const unique = createHashTable()
+  const unique = new HashTable()
 
-  return first.concat(second)
+  return first
+    .concat(second)
     .map(item => {
       unique.set(item, unique.get(item) === undefined)
       return item
