@@ -1,6 +1,12 @@
 const test = require('tape')
 const countIslands = require('./CountIslands')
 
+test('throws error with incorrect input', assert => {
+  assert.throws(() => countIslands('foo'), Error)
+  assert.throws(() => countIslands([[0, 1, 0], 'foo']), Error)
+  assert.end()
+})
+
 test('count no islands', assert => {
   const input = [
     [0, 0, 0, 0, 0],
