@@ -28,21 +28,8 @@ class Cell {
     this.col = col
   }
 
-  get isInBounds() {
-    return (
-      this.row >= 0 &&
-      this.col >= 0 &&
-      this.row < this.grid.length &&
-      this.col < this.grid[this.row].length
-    )
-  }
-
   get value() {
     return this.grid[this.row][this.col]
-  }
-
-  set value(val) {
-    this.grid[this.row][this.col] = val
   }
 
   get isExplored() {
@@ -57,13 +44,19 @@ class Cell {
     return this.value === LAND
   }
 
-  exploreIsland() {
+  markAsExplored() {
+    this.grid[this.row][this.col] = EXPLORED
+  }
+
+  explore() {
+    if (this.isWater) return this.markAsExplored()
+
     const queue = new Queue()
     queue.enqueue(this)
 
     while (queue.length) {
       const cell = queue.dequeue()
-      cell.value = EXPLORED
+      cell.markAsExplored()
       for (const neighbor of cell.neighbours()) {
         if (neighbor.isLand) queue.enqueue(neighbor)
       }
@@ -72,23 +65,25 @@ class Cell {
 
   *neighbours() {
     for (const [row, col] of [[0, -1], [0, 1], [-1, 0], [1, 0]]) {
-      const neighbor = new Cell(this.grid, this.row + row, this.col + col)
-      if (neighbor.isInBounds) yield neighbor
+      const neighborRow = this.row + row
+      const neighborCol = this.col + col
+      if (isWithinBounds(this.grid, neighborRow, neighborCol)) {
+        yield new Cell(this.grid, neighborRow, neighborCol)
+      }
     }
   }
 }
 
+function isWithinBounds(grid, row, col) {
+  return row >= 0 && col >= 0 && row < grid.length && col < grid[row].length
+}
+
 module.exports = input => {
   let islandsCount = 0
-
   for (const cell of new Grid(input)) {
     if (!cell.isExplored) {
-      if (cell.isLand) {
-        cell.exploreIsland()
-        islandsCount++
-      } else {
-        cell.value = EXPLORED
-      }
+      if (cell.isLand) islandsCount++
+      cell.explore()
     }
   }
 
