@@ -8,7 +8,7 @@
  */
 module.exports = input => {
   if (!Array.isArray(input) || input.find(row => !Array.isArray(row))) {
-    throw new Error('Input must be a non-empty 2-dimensional array.')
+    throw new Error('Input must be a 2-dimensional array.')
   }
 
   let islandsCount = 0
