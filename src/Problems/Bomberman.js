@@ -23,7 +23,6 @@ module.exports = input => {
     .map(cell => `${cell.row}:${cell.col}`)
 }
 
-const EMPTY = 0
 const WALL = 1
 const ROBOT = 2
 const HORIZONTAL = Symbol('Horizontal')
@@ -38,60 +37,51 @@ class Grid {
     this.cells = []
   }
 
+  *[Symbol.iterator]() {
+    for (let row = 0; row < this.data.length; row++) {
+      for (let col = 0; col < this.data[row].length; col++) {
+        const cell = this.cellAt(row, col)
+        if (cell) yield cell
+      }
+    }
+  }
+
   /**
    * @param {Number} row
    * @param {Number} col
    * @returns {Cell|undefined}
    */
   cellAt(row, col) {
-    if (row >= this.data.length || col >= this.data[row].length) return
-
-    const index = row * this.data.length + col
-    if (!this.cells[index]) {
-      const cell = new Cell(this.data[row][col], row, col)
-      if (!cell.isWall) {
+    if (
+      row < this.data.length &&
+      col < this.data[row].length &&
+      this.data[row][col] !== WALL
+    ) {
+      const index = row * this.data.length + col
+      if (!this.cells[index]) {
+        const cell = new Cell(this.data[row][col] === ROBOT, row, col)
         cell.neighbor[HORIZONTAL] = this.cellAt(row, col + 1)
         cell.neighbor[VERTICAL] = this.cellAt(row + 1, col)
+        this.cells[index] = cell
       }
-      this.cells[index] = cell
-    }
 
-    return this.cells[index]
-  }
-
-  *[Symbol.iterator]() {
-    for (let row = 0; row < this.data.length; row++) {
-      for (let col = 0; col < this.data[row].length; col++) {
-        yield this.cellAt(row, col)
-      }
+      return this.cells[index]
     }
   }
 }
 
 class Cell {
   /**
-   * @param {Number} value
+   * @param {Boolean} isRobot
    * @param {Number} row
    * @param {Number} col
    */
-  constructor(value, row, col) {
-    this.value = value
+  constructor(isRobot, row, col) {
+    this.isRobot = isRobot
     this.row = row
     this.col = col
     this.neighbor = { HORIZONTAL, VERTICAL }
     this.hits = { HORIZONTAL, VERTICAL }
-  }
-
-  get isEmpty() {
-    return this.value === EMPTY
-  }
-
-  get isWall() {
-    return this.value === WALL
-  }
-
-  get isRobot() {
-    return this.value === ROBOT
   }
 
   /**
@@ -100,7 +90,6 @@ class Cell {
    * @returns {Number}
    */
   get totalHits() {
-    if (this.isWall) return 0
     if (this.hits[HORIZONTAL] === undefined) this.explore(HORIZONTAL)
     if (this.hits[VERTICAL] === undefined) this.explore(VERTICAL)
 
@@ -120,10 +109,11 @@ class Cell {
     let cell = this
 
     while (cell) {
-      if (cell.isEmpty) emptyCells.push(cell)
       if (cell.isRobot) {
         cell.hits[direction] = 0
         hitCount++
+      } else {
+        emptyCells.push(cell)
       }
       cell = cell.neighbor[direction]
     }
