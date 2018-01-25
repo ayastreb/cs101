@@ -41,22 +41,20 @@ class Grid {
   /**
    * @param {Number} row
    * @param {Number} col
-   * @returns {Number} on of EMPTY, WALL or ROBOT.
-   */
-  valueAt(row, col) {
-    return this.data[row][col]
-  }
-
-  /**
-   * @param {Number} row
-   * @param {Number} col
    * @returns {Cell|undefined}
    */
   cellAt(row, col) {
     if (row >= this.data.length || col >= this.data[row].length) return
 
     const index = row * this.data.length + col
-    if (!this.cells[index]) this.cells[index] = new Cell(this, row, col)
+    if (!this.cells[index]) {
+      const cell = new Cell(this.data[row][col], row, col)
+      if (!cell.isWall) {
+        cell.neighbor[HORIZONTAL] = this.cellAt(row, col + 1)
+        cell.neighbor[VERTICAL] = this.cellAt(row + 1, col)
+      }
+      this.cells[index] = cell
+    }
 
     return this.cells[index]
   }
@@ -72,19 +70,16 @@ class Grid {
 
 class Cell {
   /**
-   * @param {Grid} grid
+   * @param {Number} value
    * @param {Number} row
    * @param {Number} col
    */
-  constructor(grid, row, col) {
-    this.grid = grid
+  constructor(value, row, col) {
+    this.value = value
     this.row = row
     this.col = col
+    this.neighbor = { HORIZONTAL, VERTICAL }
     this.hits = { HORIZONTAL, VERTICAL }
-  }
-
-  get value() {
-    return this.grid.valueAt(this.row, this.col)
   }
 
   get isEmpty() {
@@ -120,39 +115,21 @@ class Cell {
    * @param {Symbol} direction HORIZONTAL or VERTICAL
    */
   explore(direction) {
-    let hitCount = 0
-    const stack = [this]
     const emptyCells = []
+    let hitCount = 0
+    let cell = this
 
-    while (stack.length) {
-      const cell = stack.pop()
+    while (cell) {
       if (cell.isEmpty) emptyCells.push(cell)
       if (cell.isRobot) {
         cell.hits[direction] = 0
         hitCount++
       }
-
-      const neighbor = cell.neighbor(direction)
-      if (neighbor) stack.push(neighbor)
+      cell = cell.neighbor[direction]
     }
 
     for (const cell of emptyCells) {
       cell.hits[direction] = hitCount
     }
-  }
-
-  /**
-   * Get this cell's available neighbor in given direction, if it has one.
-   *
-   * @param {Symbol} direction
-   * @returns {Cell}
-   */
-  neighbor(direction) {
-    const cell = this.grid.cellAt(
-      direction === HORIZONTAL ? this.row : this.row + 1,
-      direction === HORIZONTAL ? this.col + 1 : this.col
-    )
-
-    if (cell && !cell.isWall) return cell
   }
 }
