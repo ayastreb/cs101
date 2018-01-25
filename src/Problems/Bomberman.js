@@ -80,10 +80,7 @@ class Cell {
     this.grid = grid
     this.row = row
     this.col = col
-    this.hits = {
-      [HORIZONTAL]: null,
-      [VERTICAL]: null
-    }
+    this.hits = { HORIZONTAL, VERTICAL }
   }
 
   get value() {
@@ -103,15 +100,14 @@ class Cell {
   }
 
   /**
-   * Each cell's total hits number is equal to sum of robots
-   * it could hit in its row and its column.
+   * Each cell's total hits number is equal to sum of robots it could hit in its row and its column.
    *
    * @returns {Number}
    */
   get totalHits() {
     if (this.isWall) return 0
-    if (this.hits[HORIZONTAL] === null) this.explore(HORIZONTAL)
-    if (this.hits[VERTICAL] === null) this.explore(VERTICAL)
+    if (this.hits[HORIZONTAL] === undefined) this.explore(HORIZONTAL)
+    if (this.hits[VERTICAL] === undefined) this.explore(VERTICAL)
 
     return this.hits[HORIZONTAL] + this.hits[VERTICAL]
   }
