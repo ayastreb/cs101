@@ -12,94 +12,78 @@ module.exports = input => {
   }
 
   let islandsCount = 0
-  for (const cell of new Grid(input)) {
-    if (cell.isExplored) continue
-    if (cell.isLand) islandsCount++
-    cell.explore()
+  const grid = new Grid(input)
+  for (const island of grid.islands()) {
+    grid.explore(island)
+    islandsCount++
   }
 
   return islandsCount
 }
 
-const WATER = 0
 const LAND = 1
-const EXPLORED = 2
+const VISITED = 2
 
 class Grid {
   constructor(input) {
     this.data = input
   }
 
-  *[Symbol.iterator]() {
+  /**
+   * Iterate over grid and yield each land cell encountered.
+   */
+  *islands() {
     for (let row = 0; row < this.data.length; row++) {
       for (let col = 0; col < this.data[row].length; col++) {
-        yield new Cell(this.data, row, col)
-      }
-    }
-  }
-}
-
-class Cell {
-  constructor(grid, row, col) {
-    this.grid = grid
-    this.row = row
-    this.col = col
-  }
-
-  get value() {
-    return this.grid[this.row][this.col]
-  }
-
-  get isExplored() {
-    return this.value === EXPLORED
-  }
-
-  get isWater() {
-    return this.value === WATER
-  }
-
-  get isLand() {
-    return this.value === LAND
-  }
-
-  markAsExplored() {
-    this.grid[this.row][this.col] = EXPLORED
-  }
-
-  /**
-   * When exploring water, just mark cell as explored.
-   * Otherwise - we're exploring an island and we mark all adjacent land cells as
-   * explored using DFS (depth first search), but BFS can also be used.
-   */
-  explore() {
-    if (this.isWater) return this.markAsExplored()
-
-    const stack = []
-    stack.push(this)
-
-    while (stack.length) {
-      const cell = stack.pop()
-      cell.markAsExplored()
-      for (const neighbor of cell.neighbours()) {
-        if (neighbor.isLand) stack.push(neighbor)
+        if (this.data[row][col] === LAND) {
+          yield { row, col }
+        }
       }
     }
   }
 
   /**
-   * Generate cell's neighbours in west, east, north and south directions.
+   * Explore island at given row/col coordinates.
+   * Mark it as explored and visit all its adjacent land cells with a DFS search.
+   *
+   * @param {Object} island { row: number, col: number }
    */
-  *neighbours() {
-    for (const [row, col] of [[0, -1], [0, 1], [-1, 0], [1, 0]]) {
-      const neighborRow = this.row + row
-      const neighborCol = this.col + col
-      if (isWithinBounds(this.grid, neighborRow, neighborCol)) {
-        yield new Cell(this.grid, neighborRow, neighborCol)
+  explore(island) {
+    const cellsToVisit = [island]
+
+    while (cellsToVisit.length) {
+      const cell = cellsToVisit.pop()
+      this.data[cell.row][cell.col] = VISITED
+
+      cellsToVisit.push(...this.landNeighboursOf(cell))
+    }
+  }
+
+  /**
+   * Yield all valid land cells adjacent to gievn cell.
+   *
+   * @param {Object} cell { row: number, col: number }
+   */
+  *landNeighboursOf(cell) {
+    for (const [nextRow, nextCol] of [[0, -1], [0, 1], [-1, 0], [1, 0]]) {
+      const row = cell.row + nextRow
+      const col = cell.col + nextCol
+      if (this.isWithinBounds(row, col) && this.data[row][col] === LAND) {
+        yield { row, col }
       }
     }
   }
-}
 
-function isWithinBounds(grid, row, col) {
-  return row >= 0 && col >= 0 && row < grid.length && col < grid[row].length
+  /**
+   * Check if given coordinates are valid, e.g. withtin the grid boundaries.
+   *
+   * @param {Number} row
+   * @param {Number} col
+   * @returns {Boolean}
+   */
+  isWithinBounds(row, col) {
+    const rows = this.data.length
+
+    return row >= 0 && col >= 0 && row < rows && col < this.data[row].length
+  }
 }
