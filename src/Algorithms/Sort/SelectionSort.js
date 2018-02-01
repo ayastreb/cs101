@@ -1,12 +1,16 @@
 module.exports = input => {
-  for (let outer = 0; outer < input.length; outer++) {
-    for (let inner = outer; inner < input.length; inner++) {
-      if (input[inner] < input[outer]) {
-        let tmp = input[inner]
-        input[inner] = input[outer]
-        input[outer] = tmp
-      }
+  for (let i = 0; i < input.length; i++) {
+    let min = i
+    for (let j = i + 1; j < input.length; j++) {
+      if (input[j] < input[min]) min = j
+    }
+
+    if (min !== i) {
+      let tmp = input[i]
+      input[i] = input[min]
+      input[min] = tmp
     }
   }
+
   return input
 }
