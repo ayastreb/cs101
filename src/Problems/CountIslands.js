@@ -11,31 +11,24 @@ module.exports = input => {
     throw new Error('Input must be a 2-dimensional array.')
   }
 
-  let islandsCount = 0
-  const grid = new Grid(input)
-  for (const island of grid.islands()) {
-    grid.explore(island)
-    islandsCount++
+  const LAND = 1
+  const VISITED = 2
+
+  let count = 0
+  for (const island of islands()) {
+    explore(island)
+    count++
   }
 
-  return islandsCount
-}
-
-const LAND = 1
-const VISITED = 2
-
-class Grid {
-  constructor(input) {
-    this.data = input
-  }
+  return count
 
   /**
    * Iterate over grid and yield each land cell encountered.
    */
-  *islands() {
-    for (let row = 0; row < this.data.length; row++) {
-      for (let col = 0; col < this.data[row].length; col++) {
-        if (this.data[row][col] === LAND) {
+  function* islands() {
+    for (let row = 0; row < input.length; row++) {
+      for (let col = 0; col < input[row].length; col++) {
+        if (input[row][col] === LAND) {
           yield { row, col }
         }
       }
@@ -48,42 +41,40 @@ class Grid {
    *
    * @param {Object} island { row: number, col: number }
    */
-  explore(island) {
+  function explore(island) {
     const cellsToVisit = [island]
 
     while (cellsToVisit.length) {
       const cell = cellsToVisit.pop()
-      this.data[cell.row][cell.col] = VISITED
+      input[cell.row][cell.col] = VISITED
 
-      cellsToVisit.push(...this.landNeighboursOf(cell))
+      cellsToVisit.push(...landNeighboursOf(cell))
     }
   }
 
   /**
-   * Yield all valid land cells adjacent to gievn cell.
+   * Yield all valid land cells adjacent to given cell.
    *
    * @param {Object} cell { row: number, col: number }
    */
-  *landNeighboursOf(cell) {
+  function* landNeighboursOf(cell) {
     for (const [nextRow, nextCol] of [[0, -1], [0, 1], [-1, 0], [1, 0]]) {
       const row = cell.row + nextRow
       const col = cell.col + nextCol
-      if (this.isWithinBounds(row, col) && this.data[row][col] === LAND) {
+      if (withinBounds(row, col) && input[row][col] === LAND) {
         yield { row, col }
       }
     }
   }
 
   /**
-   * Check if given coordinates are valid, e.g. withtin the grid boundaries.
+   * Check if given coordinates are valid, e.g. within the grid boundaries.
    *
    * @param {Number} row
    * @param {Number} col
    * @returns {Boolean}
    */
-  isWithinBounds(row, col) {
-    const rows = this.data.length
-
-    return row >= 0 && col >= 0 && row < rows && col < this.data[row].length
+  function withinBounds(row, col) {
+    return row >= 0 && col >= 0 && row < input.length && col < input[row].length
   }
 }
