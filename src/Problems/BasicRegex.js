@@ -13,7 +13,7 @@ module.exports = (text, pattern) => {
   while (tIndex < text.length || pIndex < pattern.length) {
     if (pattern[pIndex + 1] === '*') {
       const lookFor = pattern[pIndex] === '.' ? text[tIndex] : pattern[pIndex]
-      while (text[tIndex] === lookFor) tIndex++
+      while (tIndex < text.length && text[tIndex] === lookFor) tIndex++
       pIndex += 2
     } else if (pattern[pIndex] === '.' || pattern[pIndex] === text[tIndex]) {
       tIndex++

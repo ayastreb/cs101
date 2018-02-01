@@ -33,6 +33,7 @@ test('it matches pattern with "*" placeholder', assert => {
   assert.equal(match('a', 'ab*c*'), true)
   assert.equal(match('ax', 'ab*c*d'), false)
   assert.equal(match('abbc', 'a.*c*'), true)
+  assert.equal(match('bbbb', '.*.*.*.*c'), false)
   assert.equal(match('', 'b*c*'), true)
   assert.equal(match('abx', 'ab*c*'), false)
   assert.end()
