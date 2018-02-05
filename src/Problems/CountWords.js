@@ -1,3 +1,4 @@
+const test = require('tape')
 /**
  * Implement a document scanning function, which receives a string input
  * and returns a list of all unique words in it and their number of occurrences,
@@ -6,7 +7,7 @@
  * @param {String} input
  * @returns {Array}
  */
-module.exports = input => {
+function countWords(input) {
   const result = []
   const words = tokenize(input)
   const counter = countFrequency(words)
@@ -58,3 +59,32 @@ function sortByFrequency(map) {
 
   return sorted.filter(Array.isArray).reverse()
 }
+
+test('it counts words and sorts by frequency', assert => {
+  assert.deepEqual(
+    countWords(
+      "Practice makes perfect, you'll get perfecT by practice. just practice! just just just!!"
+    ),
+    [
+      ['just', '4'],
+      ['practice', '3'],
+      ['perfect', '2'],
+      ['makes', '1'],
+      ['youll', '1'],
+      ['get', '1'],
+      ['by', '1']
+    ]
+  )
+
+  assert.deepEqual(countWords('To be, or  not to  be, that is the question:'), [
+    ['to', '2'],
+    ['be', '2'],
+    ['or', '1'],
+    ['not', '1'],
+    ['that', '1'],
+    ['is', '1'],
+    ['the', '1'],
+    ['question', '1']
+  ])
+  assert.end()
+})

@@ -1,5 +1,4 @@
 const test = require('tape')
-
 /**
  * Given an array of non-negative integers, draw a histogram of those values.
  * Each item in the array represents the height of the column.

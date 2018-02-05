@@ -1,5 +1,4 @@
 const test = require('tape')
-
 /**
  * Given an array of digits, representing an integer, add one to it.
  *

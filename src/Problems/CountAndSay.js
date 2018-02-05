@@ -1,3 +1,4 @@
+const test = require('tape')
 /**
  * The count-and-say sequence is the sequence of integers beginning as follows:
  *
@@ -12,7 +13,7 @@
  * @param {Number} n
  * @returns {String}
  */
-module.exports = n => {
+function countAndSay(n) {
   let result = '1'
   while (--n) result = countDigits(result)
 
@@ -20,7 +21,7 @@ module.exports = n => {
 }
 
 function countDigits(input) {
-  const count = []
+  const output = []
   let index = 0
   while (index < input.length) {
     let counter = 0
@@ -29,8 +30,22 @@ function countDigits(input) {
       counter++
       index++
     }
-    count.push(`${counter}${digit}`)
+    output.push(`${counter}${digit}`)
   }
 
-  return count.join('')
+  return output.join('')
 }
+
+test('it counts digits in the string', assert => {
+  assert.equal(countAndSay(1), '1')
+  assert.equal(countAndSay(2), '11')
+  assert.equal(countAndSay(3), '21')
+  assert.equal(countAndSay(4), '1211')
+  assert.equal(countAndSay(5), '111221')
+  assert.equal(countAndSay(6), '312211')
+  assert.equal(countAndSay(7), '13112221')
+  assert.equal(countAndSay(8), '1113213211')
+  assert.equal(countAndSay(9), '31131211131221')
+  assert.equal(countAndSay(10), '13211311123113112211')
+  assert.end()
+})

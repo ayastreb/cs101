@@ -1,5 +1,4 @@
 const test = require('tape')
-
 /**
  * Return all substrings of given string.
  *

@@ -1,3 +1,4 @@
+const test = require('tape')
 /**
  * Count number of islands (connected components) in the given grid,
  * where 0 represents water and 1 represents land.
@@ -6,7 +7,7 @@
  * @param {Array} input
  * @returns {Number}
  */
-module.exports = input => {
+function countIslands(input) {
   if (!Array.isArray(input) || input.find(row => !Array.isArray(row))) {
     throw new Error('Input must be a 2-dimensional array.')
   }
@@ -15,25 +16,16 @@ module.exports = input => {
   const VISITED = 2
 
   let count = 0
-  for (const island of islands()) {
-    explore(island)
-    count++
-  }
-
-  return count
-
-  /**
-   * Iterate over grid and yield each land cell encountered.
-   */
-  function* islands() {
-    for (let row = 0; row < input.length; row++) {
-      for (let col = 0; col < input[row].length; col++) {
-        if (input[row][col] === LAND) {
-          yield { row, col }
-        }
+  for (let row = 0; row < input.length; row++) {
+    for (let col = 0; col < input[row].length; col++) {
+      if (input[row][col] === LAND) {
+        explore({ row, col })
+        count++
       }
     }
   }
+
+  return count
 
   /**
    * Explore island at given row/col coordinates.
@@ -78,3 +70,57 @@ module.exports = input => {
     return row >= 0 && col >= 0 && row < input.length && col < input[row].length
   }
 }
+
+test('throws error with incorrect input', assert => {
+  assert.throws(() => countIslands('foo'), Error)
+  assert.throws(() => countIslands([[0, 1, 0], 'foo']), Error)
+  assert.end()
+})
+
+test('count no islands', assert => {
+  const input = [
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0]
+  ]
+  assert.equal(countIslands(input), 0)
+  assert.end()
+})
+
+test('count simple islands', assert => {
+  const input = [
+    [0, 1, 1, 0, 0],
+    [0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 1],
+    [0, 1, 0, 1, 1],
+    [0, 0, 0, 0, 1]
+  ]
+  assert.equal(countIslands(input), 3)
+  assert.end()
+})
+
+test('count big islands (river)', assert => {
+  const input = [
+    [1, 1, 1, 0, 1],
+    [1, 1, 1, 0, 1],
+    [1, 1, 0, 0, 1],
+    [1, 1, 0, 1, 1],
+    [1, 1, 0, 1, 1]
+  ]
+  assert.equal(countIslands(input), 2)
+  assert.end()
+})
+
+test('count island in a lake', assert => {
+  const input = [
+    [1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1]
+  ]
+  assert.equal(countIslands(input), 2)
+  assert.end()
+})

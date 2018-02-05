@@ -1,3 +1,4 @@
+const test = require('tape')
 /**
  * You are given a NxN board with robots (2) and walls (1) scattered all about. You are given only one bomb.
  * Your mission is to kill as many robots as possible.
@@ -11,7 +12,7 @@
  * @param {Array} input 2-D matrix of NxN with robots represented by 2 and walls represented by 1. Empty spaces are marked as 0.
  * @returns {Array} list of coordinates (row index and column index) where the bomb kills the most robots.
  */
-module.exports = input => {
+function findBombPlace(input) {
   let maxHits = 0
   const grid = new Grid(input)
   for (const cell of grid) {
@@ -123,3 +124,45 @@ class Cell {
     }
   }
 }
+
+test('it finds no place for a bomb', assert => {
+  const field = [
+    [2, 2, 1, 0, 0, 0],
+    [2, 2, 1, 0, 0, 0],
+    [1, 1, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0]
+  ]
+  // there are no empty cells where we could place a bomb which will hit a target
+  assert.deepEqual(findBombPlace(field), [])
+  assert.end()
+})
+
+test('it finds single best place for a bomb', assert => {
+  const field = [
+    [0, 0, 0, 0, 0, 0],
+    [1, 2, 0, 0, 0, 2],
+    [0, 0, 0, 0, 0, 0],
+    [2, 0, 0, 1, 2, 0],
+    [0, 0, 1, 0, 0, 0],
+    [2, 0, 0, 0, 0, 0]
+  ]
+  // signle best place is row #1, column #4 - it will hit 3 targets (1:1, 1:5, 3:4)
+  assert.deepEqual(findBombPlace(field), ['1:4'])
+  assert.end()
+})
+
+test('it finds multiple best places for a bomb', assert => {
+  const field = [
+    [0, 0, 0, 0, 0, 0],
+    [1, 2, 0, 0, 0, 2],
+    [0, 0, 0, 0, 0, 0],
+    [2, 0, 0, 1, 2, 0],
+    [0, 0, 1, 0, 0, 0],
+    [2, 2, 0, 0, 0, 0]
+  ]
+  // there are 4 places which will hit 3 targets
+  assert.deepEqual(findBombPlace(field), ['1:4', '3:1', '5:4', '5:5'])
+  assert.end()
+})
