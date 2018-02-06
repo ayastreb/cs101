@@ -28,6 +28,8 @@ function binarySearchNext(needle, haystack) {
   return haystack[hi] === needle ? haystack[hi + 1] : haystack[hi]
 }
 
+module.exports = binarySearchNext
+
 test('it returns -1 if no haystack given', assert => {
   assert.equal(binarySearchNext(5, undefined), -1)
   assert.equal(binarySearchNext(5, null), -1)

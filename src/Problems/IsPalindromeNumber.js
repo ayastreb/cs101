@@ -1,3 +1,4 @@
+const test = require('tape')
 /**
  * Check if given number is a palindrome, e.g. if it reads the same from left to right
  * and from right to left. Negative numbers are not palindromes.
@@ -8,7 +9,7 @@
  * @param {number} input
  * @return {boolean}
  */
-module.exports = input => {
+function isPalindrome(input) {
   if (input < 0) return false
   const BASE = 10
 
@@ -50,3 +51,17 @@ module.exports = input => {
     )
   }
 }
+
+test('it validates number', assert => {
+  assert.equal(isPalindrome(-2), false)
+  assert.equal(isPalindrome(0), true)
+  assert.equal(isPalindrome(9), true)
+  assert.equal(isPalindrome(22), true)
+  assert.equal(isPalindrome(121), true)
+  assert.equal(isPalindrome(1001), true)
+  assert.equal(isPalindrome(12321), true)
+  assert.equal(isPalindrome(12344321), true)
+  assert.equal(isPalindrome(123), false)
+
+  assert.end()
+})

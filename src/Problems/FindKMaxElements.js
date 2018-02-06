@@ -1,3 +1,4 @@
+const test = require('tape')
 const MinHeap = require('../DataStructures/MinHeap')
 /**
  * Find k max elements from given input array.
@@ -6,7 +7,7 @@ const MinHeap = require('../DataStructures/MinHeap')
  * @param {number} k
  * @return {array}
  */
-module.exports = (input, k) => {
+function findMaxElements(input, k) {
   const heap = new MinHeap()
 
   for (let i = 0; i < input.length; i++) {
@@ -22,3 +23,9 @@ module.exports = (input, k) => {
 
   return result
 }
+
+test('it should return k max elements from given array', assert => {
+  assert.deepEqual(findMaxElements([1, 2, 5, 3, 10, 6, 0, 7], 3), [6, 7, 10])
+  assert.deepEqual(findMaxElements([3, 1, 2], 5), [1, 2, 3])
+  assert.end()
+})
