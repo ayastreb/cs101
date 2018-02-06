@@ -18,10 +18,7 @@ function findMaxElements(input, k) {
     }
   }
 
-  const result = []
-  while (heap.length) result.push(heap.extractMin())
-
-  return result
+  return [...heap]
 }
 
 test('it should return k max elements from given array', assert => {
