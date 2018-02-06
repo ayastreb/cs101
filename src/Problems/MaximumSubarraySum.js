@@ -1,13 +1,14 @@
+const test = require('tape')
 /**
  * Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
  *
  * For example, given the array [-2,1,-3,4,-1,2,1,-5,4],
  * the contiguous subarray [4,-1,2,1] has the largest sum = 6.
  *
- * @param {array} input
- * @return {number}
+ * @param {Array} input
+ * @return {Number}
  */
-module.exports = input => {
+function maxSubarraySum(input) {
   if (input.length < 1) return null
 
   let localMax = input[0]
@@ -19,3 +20,9 @@ module.exports = input => {
 
   return globalMax
 }
+
+test('it calculates maximum subarray sum', assert => {
+  assert.equal(maxSubarraySum([-2, 1, -3, 4, -1, 2, 1, -5]), 6)
+  assert.equal(maxSubarraySum([2, 3, -1, -20, 5, 10]), 15)
+  assert.end()
+})

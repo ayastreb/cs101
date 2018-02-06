@@ -1,5 +1,5 @@
+const test = require('tape')
 const findNext = require('./BinarySearchNext')
-
 /**
  * Given a string `input` and a set of words `dict`,
  * find the longest word in `dict` that is a subsequence of `input`.
@@ -8,7 +8,7 @@ const findNext = require('./BinarySearchNext')
  * @param {array|Set} dict
  * @return {string}
  */
-module.exports = (input, dict) => {
+function longestWordInDict(input, dict) {
   const positions = getCharPositionsMap()
   let longest = ''
 
@@ -40,3 +40,17 @@ module.exports = (input, dict) => {
     return position
   }
 }
+
+test('it returns empty string if no word is a subsequence of input string', assert => {
+  const input = 'pplelea'
+  const dict = ['able', 'ale', 'apple', 'bale', 'kangaroo']
+  assert.equal(longestWordInDict(input, dict), '')
+  assert.end()
+})
+
+test('it finds longest word that is a subsequence of input string', assert => {
+  const input = 'abpplele'
+  const dict = ['able', 'ale', 'apple', 'bale', 'kangaroo']
+  assert.equal(longestWordInDict(input, dict), 'apple')
+  assert.end()
+})
