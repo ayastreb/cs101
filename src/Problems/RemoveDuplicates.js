@@ -1,3 +1,4 @@
+const test = require('tape')
 /**
  * Convert string to array, create set based on that array and convert set back to string.
  *
@@ -48,8 +49,14 @@ function removeWithConstantSpace(input) {
   return input.slice(0, writeIndex).join('')
 }
 
-module.exports = {
-  removeOneliner,
-  removeWithLinearSpace,
-  removeWithConstantSpace
+runTestSuite('oneliner', removeOneliner)
+runTestSuite('linear space', removeWithLinearSpace)
+runTestSuite('constant space', removeWithConstantSpace)
+
+function runTestSuite(name, fn) {
+  test('removes duplicates from string', assert => {
+    assert.equal(fn('aabcadbeefc'), 'abcdef')
+    assert.equal(fn('abcdef'), 'abcdef')
+    assert.end()
+  })
 }

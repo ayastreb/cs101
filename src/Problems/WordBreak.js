@@ -1,3 +1,4 @@
+const test = require('tape')
 /**
  * Break given string into words from given dictionary.
  * e.g. 'applepie' with dict {'apple', 'pie'} is broken into 'apple pie'.
@@ -8,10 +9,11 @@
  * We also memoize a set of failed attempts, so that we don't recur on the same
  * input more than once.
  *
- * @param {string} string
+ * @param {String} string
  * @param {Set} dict
+ * @returns {String}
  */
-module.exports = (string, dict) => {
+function wordBreak(string, dict) {
   const failed = new Set()
   return breaker(string)
 
@@ -31,3 +33,38 @@ module.exports = (string, dict) => {
     return null
   }
 }
+
+test('return null if not found', assert => {
+  const string = 'applepie'
+  const dict = new Set(['orange', 'apple', 'cookie'])
+  assert.equal(wordBreak(string, dict), null)
+  assert.end()
+})
+
+test('break one word', assert => {
+  const string = 'apple'
+  const dict = new Set(['orange', 'apple', 'banana'])
+  assert.equal(wordBreak(string, dict), 'apple')
+  assert.end()
+})
+
+test('break two words', assert => {
+  const string = 'applepie'
+  const dict = new Set(['apple', 'banana', 'pie'])
+  assert.equal(wordBreak(string, dict), 'apple pie')
+  assert.end()
+})
+
+test('break mulptiple words', assert => {
+  const string = 'peanutbutterjelly'
+  const dict = new Set(['apple', 'butter', 'jelly', 'peanut'])
+  assert.equal(wordBreak(string, dict), 'peanut butter jelly')
+  assert.end()
+})
+
+test('backrtacking issue', assert => {
+  const string = 'aaaaaaab'
+  const dict = new Set(['a', 'aa', 'aaa', 'aaaa', 'aaaaa', 'aaaaaa', 'aaaaaaa'])
+  assert.equal(wordBreak(string, dict), null)
+  assert.end()
+})
