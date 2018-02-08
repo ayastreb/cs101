@@ -24,11 +24,12 @@ function findPairsWithDistance(input, k) {
   let first = 0
   let last = 1
   while (first < input.length && last < input.length) {
-    if (input[last] === input[first] + k) {
+    const diff = input[last] - input[first]
+    if (diff === k) {
       result.push([input[last], input[first]])
       first++
       last++
-    } else if (input[last] < input[first] + k) {
+    } else if (diff < k) {
       last++
     } else {
       first++
