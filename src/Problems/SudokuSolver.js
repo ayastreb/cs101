@@ -6,11 +6,11 @@ const test = require('tape')
  *
  * Solution approach:
  * We can use backtracking to check all possible placements of numbers on the board.
- * With each step we choose next cell to fill in trying to minimize number of possible
- * candidates, e.g. we choose the cell in most filled 3x3 sub-board with smallest
- * number of candidates.
- * After we find this cell we try to fill in first candidate and recursievly proceed
- * to next step with a board wich has 1 less empty cell.
+ * With each step we choose next cell to fill in, trying to minimize the amount
+ * of possible candidates, e.g. we choose a cell in the most filled block (3x3 sub-board)
+ * with the smallest amount of candidates (numbers that could be placed in the cell without violating any rules).
+ * After we find this cell we try to fill in the first candidate
+ * and recursievly proceed to the next step with a board wich has -1 empty cell.
  * If our first candidate does not lead to solution (e.g. there are empty cells
  * which have no candidates) - we backtrack and try to solve it with next candidate.
  *
