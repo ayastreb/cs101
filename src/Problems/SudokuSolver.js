@@ -7,8 +7,8 @@ const test = require('tape')
  * Solution approach:
  * We can use backtracking to check all possible placements of numbers on the board.
  * With each step we choose next cell to fill in, trying to minimize the amount
- * of possible candidates, e.g. we choose a cell in the most filled block (3x3 sub-board)
- * with the smallest amount of candidates (numbers that could be placed in the cell without violating any rules).
+ * of possible candidates, e.g. we choose a cell with the smallest amount of candidates
+ * (numbers that could be placed in the cell without violating any rules).
  * After we find this cell we try to fill in the first candidate
  * and recursievly proceed to the next step with a board wich has -1 empty cell.
  * If our first candidate does not lead to solution (e.g. there are empty cells
@@ -37,51 +37,29 @@ function solveSudoku(board) {
   return false
 
   /**
-   * Get empty cell which should be filled next.
-   * First, find the most filled block (e.g. with minimum empty cells),
-   * then find a cell in that block with minimum possible candidates.
+   * Find a cell that has minimum amount of possible candidates.
    *
    * @returns {Object|Boolean} false, if no empty cells left on the board
    */
   function nextEmptyCell() {
-    const block = mostFilledBlock()
-    if (!block) return false
-
     let next
-    for (const cell of blockCells(block.id)) {
-      if (cell.value !== EMPTY) continue
+    for (let id = 0; id < board.length; id++) {
+      const blockCandidates = new Set(NUMS)
+      for (const cell of blockCells(id)) {
+        if (cell.value !== EMPTY) blockCandidates.delete(cell.value)
+      }
+      if (blockCandidates.size === 0) continue
 
-      const candidates = cellCandidates(cell, block.candidates)
-      if (!next || candidates.size < next.candidates.size) {
-        next = { row: cell.row, col: cell.col, candidates }
+      for (const cell of blockCells(id)) {
+        if (cell.value !== EMPTY) continue
+        const candidates = cellCandidates(cell, blockCandidates)
+        if (!next || candidates.size < next.candidates.size) {
+          next = { row: cell.row, col: cell.col, candidates }
+        }
       }
     }
 
     return next
-  }
-
-  /**
-   * Find a block (3x3 sub-board) on the board which has minimal number
-   * of possible candidates (e.g. most filled block),
-   * but with at least one candidate (e.g. do not return completely filled block).
-   *
-   * @returns {Object|undefined} { id: Number, candidates: Set }
-   */
-  function mostFilledBlock() {
-    let block
-    for (let id = 0; id < board.length; id++) {
-      const candidates = new Set(NUMS)
-      for (const cell of blockCells(id)) {
-        if (cell.value !== EMPTY) candidates.delete(cell.value)
-      }
-
-      if (candidates.size === 0) continue
-      if (!block || candidates.size < block.candidates.size) {
-        block = { id, candidates }
-      }
-    }
-
-    return block
   }
 
   /**
