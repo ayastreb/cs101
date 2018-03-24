@@ -9,6 +9,7 @@ const test = require('tape')
  * @returns {Array}
  */
 function nextGreaterElements(input) {
+  const output = new Array(input.length).fill(-1)
   const greater = []
   for (let index = input.length - 1; index >= 0; index--) {
     let current = input[index]
@@ -16,15 +17,13 @@ function nextGreaterElements(input) {
     while (greater.length > 0 && next <= current) next = greater.pop()
 
     if (next > current) {
-      input[index] = next
+      output[index] = next
       greater.push(next)
-    } else {
-      input[index] = -1
     }
     greater.push(current)
   }
 
-  return input
+  return output
 }
 
 test('returns -1 for array with 1 element', assert => {
